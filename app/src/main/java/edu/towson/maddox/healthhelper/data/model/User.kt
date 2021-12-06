@@ -7,16 +7,15 @@ import java.util.*
 
 @Entity(tableName = "user")
 data class User(
-    @NotNull
     @PrimaryKey(autoGenerate = true)
-    val id : Int,
+    val user_id : Int,
     val username : String,
     val password : String,
-    val accountCreated : Date = Date(),
+    val accountCreated : Date = Calendar.getInstance().time,
     val email : String?,
     val firstName : String?,
     val lastName : String?,
     val dateOfBirth : Date?,
     val lastLogin : Date?,
-    val activeAccount : Boolean
+    val activeAccount : Boolean = true
 )

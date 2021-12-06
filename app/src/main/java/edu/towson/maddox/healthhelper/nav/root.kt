@@ -13,11 +13,11 @@ import edu.towson.maddox.healthhelper.db.DB
 
 @ExperimentalMaterialApi
 @Composable
-fun root(app : Application)
+fun Root(app : Application)
 {
     Scaffold(
         topBar = {
-            Text(text = "Assignment 5")
+            Text(text = "Health Helper")
         }
     ) {
         val db = Room.databaseBuilder(
@@ -31,7 +31,25 @@ fun root(app : Application)
 
             composable(Routes.Main.route) { }
 
+            composable(Routes.Vitals.route) { }
+
             composable(Routes.AddVital.route) { }
+
+            composable(Routes.Conditions.route) { }
+
+            composable(Routes.AddCondition.route) { }
+
+            composable(Routes.Medications.route) { }
+
+            composable(Routes.AddMedication.route) { }
+
+            composable(Routes.RiskFactors.route) { }
+
+            composable(Routes.AddRiskFactor.route) { }
+
+            composable(Routes.Surveys.route) { }
+
+            composable(Routes.TakeSurvey.route) { }
         }
     }
 }
