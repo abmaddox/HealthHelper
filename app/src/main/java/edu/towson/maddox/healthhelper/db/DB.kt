@@ -1,6 +1,5 @@
 package edu.towson.maddox.healthhelper.db
 
-import android.media.MediaCas
 import androidx.room.Database
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
@@ -33,7 +32,7 @@ import edu.towson.maddox.healthhelper.data.model.vitals.uVitals
     uMedications::class,
     Condition::class,
     uConditions::class
-                     ], version=1)
+], version=1)
 @TypeConverters(Converters::class)
 abstract class DB : RoomDatabase() {
     abstract fun healthDAO() : HealthDAO
