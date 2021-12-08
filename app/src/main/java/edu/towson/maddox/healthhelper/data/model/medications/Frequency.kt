@@ -5,7 +5,11 @@ import androidx.room.PrimaryKey
 
 @Entity(tableName = "frequency")
 data class Frequency (
-    @PrimaryKey
-    val frequency_id : Int,
+    @PrimaryKey(autoGenerate = true)
+    val frequency_id : Int = 0,
     val code : String
-)
+){
+    override fun toString(): String {
+        return code
+    }
+}

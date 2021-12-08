@@ -5,7 +5,11 @@ import androidx.room.PrimaryKey
 
 @Entity(tableName = "doseUnit")
 data class DoseUnit (
-    @PrimaryKey
-    val unit_id : Int,
+    @PrimaryKey(autoGenerate = true)
+    val unit_id : Int = 0,
     val unit : String
-        )
+        ){
+    override fun toString(): String {
+        return unit
+    }
+}

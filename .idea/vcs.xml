@@ -2,11 +2,11 @@
 <project version="4">
   <component name="VcsDirectoryMappings">
     <mapping directory="$PROJECT_DIR$" vcs="Git" />
-    <mapping directory="$PROJECT_DIR$/COSC435/Assignments/Assignment3" vcs="Git" />
-    <mapping directory="$PROJECT_DIR$/COSC435/Assignments/Assignment5" vcs="Git" />
-    <mapping directory="$PROJECT_DIR$/COSC435/courselectures" vcs="Git" />
-    <mapping directory="$PROJECT_DIR$/COSC435/labs/gitlab1a" vcs="Git" />
-    <mapping directory="$PROJECT_DIR$/COSC435/labs/labsapp" vcs="Git" />
-    <mapping directory="$PROJECT_DIR$/COSC435/pandaplanner" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/COSC435/Assignments/Assignment3" vcs="" />
+    <mapping directory="$PROJECT_DIR$/COSC435/Assignments/Assignment5" vcs="" />
+    <mapping directory="$PROJECT_DIR$/COSC435/courselectures" vcs="" />
+    <mapping directory="$PROJECT_DIR$/COSC435/labs/gitlab1a" vcs="" />
+    <mapping directory="$PROJECT_DIR$/COSC435/labs/labsapp" vcs="" />
+    <mapping directory="$PROJECT_DIR$/COSC435/pandaplanner" vcs="" />
   </component>
 </project>

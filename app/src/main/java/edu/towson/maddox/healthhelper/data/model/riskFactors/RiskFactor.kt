@@ -5,7 +5,11 @@ import androidx.room.PrimaryKey
 
 @Entity(tableName = "riskFactor")
 data class RiskFactor(
-    @PrimaryKey
-    val factor_id : Int,
+    @PrimaryKey(autoGenerate = true)
+    val factor_id : Int = 0,
     val factorName : String
-)
+){
+    override fun toString(): String {
+        return factorName
+    }
+}

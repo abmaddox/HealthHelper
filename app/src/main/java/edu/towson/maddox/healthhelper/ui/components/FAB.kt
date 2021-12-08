@@ -12,6 +12,6 @@ import androidx.compose.ui.graphics.Color
 fun FAB(onClick:()->Unit,
         modifier: Modifier = Modifier) {
     FloatingActionButton(onClick = onClick, modifier = modifier) {
-        Icon(Icons.Filled.Add, contentDescription = null, tint = Color.White)
+        Icon(Icons.Filled.Add, contentDescription = null, tint = Color.Cyan)
     }
 }

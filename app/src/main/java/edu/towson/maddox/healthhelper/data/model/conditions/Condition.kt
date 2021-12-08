@@ -5,7 +5,7 @@ import androidx.room.PrimaryKey
 
 @Entity(tableName = "condition")
 data class Condition (
-    @PrimaryKey
-    val condition_id : Int,
+    @PrimaryKey(autoGenerate = true)
+    val condition_id : Int = 0,
     val conditionName : String
         )

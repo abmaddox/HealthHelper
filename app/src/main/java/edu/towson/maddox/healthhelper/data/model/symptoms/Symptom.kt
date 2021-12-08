@@ -5,7 +5,11 @@ import androidx.room.PrimaryKey
 
 @Entity(tableName = "symptom")
 data class Symptom (
-    @PrimaryKey
-    val symptom_id : Int,
+    @PrimaryKey(autoGenerate = true)
+    val symptom_id : Int = 0,
     val symptomName : String
-        )
+        ){
+    override fun toString(): String {
+        return symptomName
+    }
+}

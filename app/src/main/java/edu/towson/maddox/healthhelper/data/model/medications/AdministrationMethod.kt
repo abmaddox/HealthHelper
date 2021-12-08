@@ -5,7 +5,11 @@ import androidx.room.PrimaryKey
 
 @Entity(tableName = "administrationMethod")
 data class AdministrationMethod (
-    @PrimaryKey
-    val method_id : Int,
+    @PrimaryKey(autoGenerate = true)
+    val method_id : Int = 0,
     val code : String
-        )
+        ){
+    override fun toString(): String {
+        return code
+    }
+}
