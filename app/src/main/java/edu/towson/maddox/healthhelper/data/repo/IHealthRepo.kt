@@ -1,5 +1,6 @@
 package edu.towson.maddox.healthhelper.data.repo
 
+import androidx.room.Delete
 import edu.towson.maddox.healthhelper.data.model.User
 import edu.towson.maddox.healthhelper.data.model.conditions.Condition
 import edu.towson.maddox.healthhelper.data.model.conditions.uConditions
@@ -100,6 +101,25 @@ interface IHealthRepo {
         suspend fun updateConditions(c : Condition)
         suspend fun updateUserConditions(uc : uConditions)
 
+//DELETERS
+        //TODO implement deletion according to integrity constraints
+//        //User
+//        @Delete
+//        suspend fun deleteUser(u: User)
 
+        //Vital sign
+        suspend fun deleteUserVital(uv : uVitals)
+
+        //Symptoms
+        suspend fun deleteUserSymptoms(us : uSymptoms)
+
+        //Medications
+        suspend fun deleteUserMeds(um : uMedications)
+
+        //Risk factors
+        suspend fun deleteUserRiskFactors(uv: uRiskFactors)
+
+        //Conditions
+        suspend fun deleteUserConditions(uc : uConditions)
 
 }

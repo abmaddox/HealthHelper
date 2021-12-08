@@ -9,8 +9,8 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
+import edu.towson.maddox.healthhelper.data.repo.HealthRepo
 import edu.towson.maddox.healthhelper.db.DB
-import edu.towson.maddox.healthhelper.db.HealthDAO
 import edu.towson.maddox.healthhelper.ui.screens.main.home.Home
 import edu.towson.maddox.healthhelper.ui.screens.main.login.Login
 import edu.towson.maddox.healthhelper.ui.screens.main.login.LoginViewModel
@@ -27,9 +27,9 @@ fun Root(db : DB)
         }
     ) {
 
-        val dao : HealthDAO = db.healthDAO()
-        val loginViewModel = LoginViewModel(dao)
-        val signupViewModel = SignupViewModel(dao)
+        val repo : HealthRepo = HealthRepo(db.healthDAO())
+        val loginViewModel = LoginViewModel(repo)
+        val signupViewModel = SignupViewModel(repo)
 
         val navController = rememberNavController()
         NavHost(navController = navController, startDestination = Routes.Login.route) {
@@ -55,38 +55,41 @@ fun Root(db : DB)
                 onCancelClick = {navController.navigate(Routes.Login.route) }, vm = signupViewModel)
             }
 
+            //Main menu
             composable(Routes.Home.route + "/{userId}",
                 arguments = listOf(navArgument("userId"){ type = NavType.IntType})) { Home(user_id = it.arguments!!.get("userId") as Int) }
 
+    //VITALS
+            //Vital Sign main page
             composable(Routes.Vitals.route + "/{userId}",
                 arguments = listOf(navArgument("userId"){ type = NavType.IntType})) { }
-
+            //Add new vital sign page
             composable(Routes.AddVital.route + "/{userId}",
                 arguments = listOf(navArgument("userId"){ type = NavType.IntType})) { }
-
+    //CONDITIONS
+            //Conditions main page
             composable(Routes.Conditions.route + "/{userId}",
                 arguments = listOf(navArgument("userId"){ type = NavType.IntType})) { }
-
+            //Add new condition page
             composable(Routes.AddCondition.route + "/{userId}",
                 arguments = listOf(navArgument("userId"){ type = NavType.IntType})) { }
 
+    //MEDICATIONS
+            //Medications main page
             composable(Routes.Medications.route + "/{userId}",
                 arguments = listOf(navArgument("userId"){ type = NavType.IntType})) { }
-
+            //Add new medication page
             composable(Routes.AddMedication.route + "/{userId}",
                 arguments = listOf(navArgument("userId"){ type = NavType.IntType})) { }
 
+    //RISK_FACTORS
+            //Risk factors main page
             composable(Routes.RiskFactors.route + "/{userId}",
                 arguments = listOf(navArgument("userId"){ type = NavType.IntType})) { }
-
+            //Add new risk factor page
             composable(Routes.AddRiskFactor.route + "/{userId}",
                 arguments = listOf(navArgument("userId"){ type = NavType.IntType})) { }
 
-            composable(Routes.Surveys.route + "/{userId}",
-                arguments = listOf(navArgument("userId"){ type = NavType.IntType})) { }
-
-            composable(Routes.TakeSurvey.route + "/{userId}",
-                arguments = listOf(navArgument("userId"){ type = NavType.IntType})) { }
         }
     }
 }

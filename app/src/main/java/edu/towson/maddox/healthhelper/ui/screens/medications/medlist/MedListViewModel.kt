@@ -5,11 +5,11 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import edu.towson.maddox.healthhelper.data.model.medications.*
-import edu.towson.maddox.healthhelper.db.HealthDAO
+import edu.towson.maddox.healthhelper.data.repo.HealthRepo
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-class MedListViewModel(private val dao: HealthDAO, private val user_id : Int) : ViewModel() {
+class MedListViewModel(private val repo: HealthRepo, private val user_id : Int) : ViewModel() {
     private val _userMedications: MutableState<List<uMedications>> = mutableStateOf(listOf())
     val userMedications = _userMedications
 
@@ -24,11 +24,11 @@ class MedListViewModel(private val dao: HealthDAO, private val user_id : Int) : 
 
     init {
         viewModelScope.launch(Dispatchers.IO){
-            _userMedications.value = dao.getUserMeds(user_id)
-            _methods.value = dao.getAdminMethods()
-            _medications.value = dao.getMedication()
-            _frequencies.value = dao.getFrequencies()
-            _units.value = dao.getDoseUnits()
+            _userMedications.value = repo.getUserMeds(user_id)
+            _methods.value = repo.getAdminMethods()
+            _medications.value = repo.getMedication()
+            _frequencies.value = repo.getFrequencies()
+            _units.value = repo.getDoseUnits()
         }
     }
 

@@ -15,13 +15,12 @@ import edu.towson.maddox.healthhelper.data.model.medications.*
 @ExperimentalFoundationApi
 @Composable
 fun UMedicationRow(
-    med : Medication,
-    freq : Frequency,
-    method : AdministrationMethod,
-    unit : DoseUnit,
+    med: Medication,
+    freq: Frequency,
+    method: AdministrationMethod,
+    unit: DoseUnit,
     uMedications: uMedications,
-    onDelete: (uMedications) -> Unit,
-    onSelectuMedication: (uMedications) -> Unit
+    onDelete: (uMedications)-> Unit,
 ) {
     Card(
         shape = RoundedCornerShape(5.dp),
@@ -36,9 +35,7 @@ fun UMedicationRow(
                     onLongClick = {
                         onDelete(uMedications)
                     }
-                ) {
-                    onSelectuMedication(uMedications)
-                }
+                ){}
                 .padding(16.dp),
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.SpaceEvenly

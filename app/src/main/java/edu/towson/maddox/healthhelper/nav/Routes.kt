@@ -9,8 +9,6 @@ sealed class Routes (val route: String){
     object AddCondition: Routes("AddConditions")
     object Medications: Routes("Medications")
     object AddMedication: Routes("AddMedications")
-    object Surveys: Routes("Survey")
-    object TakeSurvey: Routes("TakeSurvey")
     object Home: Routes("Home")
     object Login: Routes("Login")
     object Signup: Routes("Signup")

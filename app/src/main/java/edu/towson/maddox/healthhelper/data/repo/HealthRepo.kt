@@ -196,5 +196,25 @@ class HealthRepo(private val dao: HealthDAO) : IHealthRepo {
         dao.updateUserConditions(uc)
     }
 
+    override suspend fun deleteUserVital(uv: uVitals) {
+        dao.deleteUserVital(uv)
+    }
+
+    override suspend fun deleteUserSymptoms(us: uSymptoms) {
+        dao.deleteUserSymptoms(us)
+    }
+
+    override suspend fun deleteUserMeds(um: uMedications) {
+        dao.deleteUserMeds(um)
+    }
+
+    override suspend fun deleteUserRiskFactors(urf: uRiskFactors) {
+        dao.deleteUserRiskFactors(urf)
+    }
+
+    override suspend fun deleteUserConditions(uc: uConditions) {
+        dao.deleteUserConditions(uc)
+    }
+
 
 }

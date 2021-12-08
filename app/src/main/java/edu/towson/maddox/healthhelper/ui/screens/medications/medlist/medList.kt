@@ -11,7 +11,6 @@ import edu.towson.maddox.healthhelper.data.model.medications.*
 @ExperimentalFoundationApi
 @Composable
 fun MedList(onDelete: (uMedications) -> Unit,
-            onSelectuMedication: (uMedications) -> Unit,
             vm : MedListViewModel,
             fab : @Composable () -> Unit = {}){
     Scaffold(
@@ -21,15 +20,14 @@ fun MedList(onDelete: (uMedications) -> Unit,
     ) {
         LazyColumn{
             itemsIndexed(vm.userMedications.value){
-                    idx, umed ->
+                    _, umed ->
                 UMedicationRow(
                     med = vm.getMed(umed.medication_id),
                     freq = vm.getFreq(umed.frequency_id),
                     method = vm.getMethod(umed.method_id),
                     unit = vm.getUnit(umed.unit_id),
                     uMedications = umed,
-                    onDelete = onDelete,
-                    onSelectuMedication = onSelectuMedication
+                    onDelete = onDelete
                 )
             }
         }

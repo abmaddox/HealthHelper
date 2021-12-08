@@ -18,13 +18,14 @@ interface HealthDAO {
     //GETTERS
 
         //User
+        @Query("SELECT user_id from user WHERE username=:username AND password=:password")
         suspend fun getUserId(username : String, password : String) : Int?
 
         //Vital sign
         @Query("SELECT * from uVitals WHERE user_id=:id")
         suspend fun getUserVitals(id : Int) : List<uVitals>
         @Transaction
-        @Query("SELECT * FROM vitalSign")
+        @Query("SELECT * FROM recordingMethod")
         suspend fun getRecordingMethods(): List<RecordingMethod>
         @Query("SELECT * FROM vitalSign")
         suspend fun getVitalSigns() : List<VitalSign>
@@ -139,11 +140,38 @@ interface HealthDAO {
         @Update
         suspend fun updateRiskFactors(rf : RiskFactor)
         @Update
-        suspend fun updateUserRiskFactors(uv: uRiskFactors)
+        suspend fun updateUserRiskFactors(urf: uRiskFactors)
 
         //Conditions
         @Update
         suspend fun updateConditions(c : Condition)
         @Update
         suspend fun updateUserConditions(uc : uConditions)
+
+
+//DELETERS
+        //TODO implement deletion according to integrity constraints
+//        //User
+//        @Delete
+//        suspend fun deleteUser(u: User)
+
+        //Vital sign
+        @Delete
+        suspend fun deleteUserVital(uv : uVitals)
+
+        //Symptoms
+        @Delete
+        suspend fun deleteUserSymptoms(us : uSymptoms)
+
+        //Medications
+        @Delete
+        suspend fun deleteUserMeds(um : uMedications)
+
+        //Risk factors
+        @Delete
+        suspend fun deleteUserRiskFactors(urf: uRiskFactors)
+
+        //Conditions
+        @Delete
+        suspend fun deleteUserConditions(uc : uConditions)
 }

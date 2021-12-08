@@ -5,12 +5,11 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import edu.towson.maddox.healthhelper.data.model.User
-import edu.towson.maddox.healthhelper.db.HealthDAO
+import edu.towson.maddox.healthhelper.data.repo.HealthRepo
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-class SignupViewModel(private val dao: HealthDAO) : ViewModel(){
+class SignupViewModel(private val dao: HealthRepo) : ViewModel(){
     private val _user : MutableState<User> = mutableStateOf(User(username = "", password = ""))
     val user = _user
 
