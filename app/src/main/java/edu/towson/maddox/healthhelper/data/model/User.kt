@@ -8,14 +8,14 @@ import java.util.*
 @Entity(tableName = "user")
 data class User(
     @PrimaryKey(autoGenerate = true)
-    val user_id : Int,
+    val user_id : Int = 0,
     val username : String,
     val password : String,
     val accountCreated : Date = Calendar.getInstance().time,
-    val email : String?,
-    val firstName : String?,
-    val lastName : String?,
-    val dateOfBirth : Date?,
-    val lastLogin : Date?,
+    val email : String? = null,
+    val firstName : String? = null,
+    val lastName : String? = null,
+    val dateOfBirth : Date? = null,
+    val lastLogin : Date = Calendar.getInstance().time,
     val activeAccount : Boolean = true
 )

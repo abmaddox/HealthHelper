@@ -27,7 +27,7 @@ fun UMedicationRow(
         shape = RoundedCornerShape(5.dp),
         elevation = 16.dp,
         modifier = Modifier
-            .padding(start=16.dp, end=16.dp, top=5.dp, bottom=5.dp)
+            .padding(start = 16.dp, end = 16.dp, top = 5.dp, bottom = 5.dp)
             .fillMaxWidth()
     ) {
         Row(
@@ -38,7 +38,8 @@ fun UMedicationRow(
                     }
                 ) {
                     onSelectuMedication(uMedications)
-                }.padding(16.dp),
+                }
+                .padding(16.dp),
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.SpaceEvenly
         ) {
@@ -70,8 +71,8 @@ fun UMedicationRow(
                     modifier = Modifier.padding(5.dp),
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    Text("Start Date:", modifier = Modifier.weight(1.0f))
-                    Text(uMedications.startDate.toString(), modifier = Modifier.weight(2.0f))
+                    Text("End Date:", modifier = Modifier.weight(1.0f))
+                    Text(if (uMedications.endDate != null) uMedications.endDate.toString() else "n/a", modifier = Modifier.weight(2.0f))
                 }
             }
             Column(
@@ -83,15 +84,24 @@ fun UMedicationRow(
                     modifier = Modifier.padding(5.dp),
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    Text("Start Date:", modifier = Modifier.weight(1.0f))
+                    Text("Frequency:", modifier = Modifier.weight(1.0f))
                     Text(text = freq.toString(), modifier = Modifier.weight(2.0f))
                 }
                 Row(
                     modifier = Modifier.padding(5.dp),
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    Text("Start Date:", modifier = Modifier.weight(1.0f))
+                    Text("Administration\n method:", modifier = Modifier.weight(1.0f))
                     Text(text = method.toString(), modifier = Modifier.weight(2.0f))
+                }
+                if (uMedications.reason != null){
+                    Row(
+                        modifier = Modifier.padding(5.dp),
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Text("Administration\n method:", modifier = Modifier.weight(1.0f))
+                        Text(text = uMedications.reason, modifier = Modifier.weight(2.0f))
+                    }
                 }
             }
         }

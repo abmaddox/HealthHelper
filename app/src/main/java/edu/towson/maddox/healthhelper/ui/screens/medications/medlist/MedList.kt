@@ -21,7 +21,7 @@ fun MedList(onDelete: (uMedications) -> Unit,
     ) {
         LazyColumn{
             itemsIndexed(vm.userMedications.value){
-                    _, umed ->
+                    idx, umed ->
                 UMedicationRow(
                     med = vm.getMed(umed.medication_id),
                     freq = vm.getFreq(umed.frequency_id),
