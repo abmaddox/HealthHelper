@@ -1,4 +1,4 @@
-package edu.towson.maddox.healthhelper.ui.screens.conditions.conditionlist
+package edu.towson.maddox.healthhelper.ui.screens.conditions.conditionslist
 
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.combinedClickable

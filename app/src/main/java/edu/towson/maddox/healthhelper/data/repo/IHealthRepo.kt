@@ -117,7 +117,7 @@ interface IHealthRepo {
         suspend fun deleteUserMeds(um : uMedications)
 
         //Risk factors
-        suspend fun deleteUserRiskFactors(uv: uRiskFactors)
+        suspend fun deleteUserRiskFactors(urf: uRiskFactors)
 
         //Conditions
         suspend fun deleteUserConditions(uc : uConditions)

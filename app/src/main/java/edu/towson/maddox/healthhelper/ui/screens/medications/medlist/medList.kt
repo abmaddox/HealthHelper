@@ -1,11 +1,14 @@
 package edu.towson.maddox.healthhelper.ui.screens.medications.medlist
 
 import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material.FabPosition
 import androidx.compose.material.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
 import edu.towson.maddox.healthhelper.data.model.medications.*
 
 @ExperimentalFoundationApi
@@ -18,7 +21,9 @@ fun MedList(onDelete: (uMedications) -> Unit,
         floatingActionButtonPosition = FabPosition.End,
         isFloatingActionButtonDocked = true
     ) {
-        LazyColumn{
+        LazyColumn(modifier = Modifier
+            .fillMaxWidth()
+            .fillMaxHeight()){
             itemsIndexed(vm.userMedications.value){
                     _, umed ->
                 UMedicationRow(
@@ -27,7 +32,7 @@ fun MedList(onDelete: (uMedications) -> Unit,
                     method = vm.getMethod(umed.method_id),
                     unit = vm.getUnit(umed.unit_id),
                     uMedications = umed,
-                    onDelete = onDelete
+                    onDelete = { onDelete(umed) }
                 )
             }
         }

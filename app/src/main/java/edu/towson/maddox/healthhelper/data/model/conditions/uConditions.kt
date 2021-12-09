@@ -7,6 +7,6 @@ import java.util.*
 data class uConditions(
     val user_id : Int,
     val condition_id : Int,
-    val startDate: Date,
+    val startDate: Date?,
     val endDate: Date?
 )

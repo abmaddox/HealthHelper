@@ -3,15 +3,21 @@ package edu.towson.maddox.healthhelper
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.room.Room
+import androidx.room.RoomDatabase
+import androidx.sqlite.db.SupportSQLiteDatabase
 import edu.towson.maddox.healthhelper.db.DB
 import edu.towson.maddox.healthhelper.nav.Root
 import edu.towson.maddox.healthhelper.ui.theme.HealthHelperTheme
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 
 class MainActivity : ComponentActivity() {
+    @ExperimentalFoundationApi
     @ExperimentalMaterialApi
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -22,10 +28,14 @@ class MainActivity : ComponentActivity() {
                     val db : DB = Room.databaseBuilder(
                         applicationContext,
                         DB::class.java, "HealthDB"
-                    ).build()
-                    Root(db = db)
+                    ).fallbackToDestructiveMigration().build()
+
+                    val scope = CoroutineScope(Dispatchers.IO)
+                    Root(db = db, scope)
+
                 }
             }
         }
     }
 }
+

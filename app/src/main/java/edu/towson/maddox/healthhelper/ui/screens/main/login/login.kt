@@ -22,9 +22,10 @@ fun Login(username : String = "",
           onLoginClick : (Int) -> Unit,
           onSignupClick : () -> Unit){
     vm.setUsername(username)
-    Column(horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Center)  {
-        Text(text = "Welcome! Please login below", modifier = Modifier.paddingFromBaseline(top = 15.dp, bottom = 15.dp))
+    Column(modifier = Modifier.fillMaxWidth().fillMaxHeight(),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Center)  {
+        Text(text = "Welcome! Please login below")
         Spacer(modifier = Modifier.padding(vertical = 10.dp))
         if(vm.showValidationText.value) {
             Text(
@@ -38,19 +39,18 @@ fun Login(username : String = "",
         Row(modifier = Modifier.padding(10.dp)) {
 
             Button(onClick = {
-                vm.viewModelScope.launch(Dispatchers.IO)
-                {
-                    var uid = vm.validate()
-                    if (uid != null) {
-                        onLoginClick(uid)
-                    }
-                }
-                             },
+                    vm.validate()
+                    if (vm.valid.value) {
+                        onLoginClick(vm.user_id.value!!)
+                    } },
             modifier = Modifier.padding(horizontal = 15.dp)){
                 Text(text = "Login")
             }
 
-            Button(onClick = { onSignupClick() },
+            Button(onClick = {
+                vm.setUsername("")
+                vm.setPassword("")
+                onSignupClick() },
                 modifier = Modifier.padding(horizontal = 15.dp)){
                 Text(text = "Signup")
             }
@@ -67,7 +67,6 @@ fun UsernameTextField(vm: LoginViewModel) {
         value = vm.username.value,
         onValueChange = { vm.setUsername(it) },
         label = { Text("Enter username") },
-        visualTransformation = PasswordVisualTransformation(),
         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
         modifier = Modifier.paddingFromBaseline(top = 15.dp, bottom = 15.dp)
     )

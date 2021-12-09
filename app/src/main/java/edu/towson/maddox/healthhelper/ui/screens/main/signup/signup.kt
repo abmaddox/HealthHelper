@@ -16,6 +16,7 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 
 @Composable
@@ -23,9 +24,10 @@ fun Signup(vm: SignupViewModel,
            onCancelClick : () -> Unit,
            onSignupClick : (String) -> Unit){
     val ctx = LocalContext.current
-    Column(horizontalAlignment = Alignment.CenterHorizontally,
+    Column(modifier = Modifier.fillMaxWidth().fillMaxHeight(),
+        horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center)  {
-        Text(text = "Welcome! Please signup below", modifier = Modifier.paddingFromBaseline(top = 15.dp, bottom = 15.dp))
+        Text(text = "Welcome! Please signup below")
         Spacer(modifier = Modifier.padding(vertical = 10.dp))
         if(vm.showMatchValidationText.value) {
             Text(
@@ -47,14 +49,11 @@ fun Signup(vm: SignupViewModel,
         Row(modifier = Modifier.padding(10.dp)) {
 
             Button(onClick = {
-                vm.viewModelScope.launch(Dispatchers.IO)
-                {
-                    var valid = vm.validate()
-                    if (valid) {
+                vm.validate()
+                if (vm.valid.value) {
                         Toast.makeText(ctx, "Signup Successful!", Toast.LENGTH_SHORT).show()
                         onSignupClick(vm.username.value)
                     }
-                }
             },
                 modifier = Modifier.padding(horizontal = 15.dp)){
                 Text(text = "Signup")
@@ -72,12 +71,10 @@ fun Signup(vm: SignupViewModel,
 
 @Composable
 fun UsernameTextField(vm: SignupViewModel) {
-
     TextField(
         value = vm.username.value,
         onValueChange = { vm.setUsername(it) },
         label = { Text("Enter username") },
-        visualTransformation = PasswordVisualTransformation(),
         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
         modifier = Modifier.paddingFromBaseline(top = 15.dp, bottom = 15.dp)
     )
@@ -86,10 +83,14 @@ fun UsernameTextField(vm: SignupViewModel) {
 @Composable
 fun PasswordTextField(vm: SignupViewModel, confirmField : Boolean = false) {
     var labelText = "Enter password"
-    if (confirmField) labelText = "Confirm password"
+    var text = vm.password
+    if (confirmField) {
+        labelText = "Confirm password"
+        text = vm.confirmPassword
+    }
     TextField(
-        value = vm.password.value,
-        onValueChange = { vm.setPassword(it) },
+        value = text.value,
+        onValueChange = { if (confirmField) vm.setConfirmPassword(it) else vm.setPassword(it) },
         label = { Text(labelText) },
         visualTransformation = PasswordVisualTransformation(),
         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),

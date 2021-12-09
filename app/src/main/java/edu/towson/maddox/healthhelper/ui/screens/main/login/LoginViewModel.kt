@@ -16,9 +16,14 @@ class LoginViewModel(private val dao: HealthRepo) : ViewModel(){
     val password = _password
 
     private val _user_id : MutableState<Int?> = mutableStateOf(null)
+    val user_id = _user_id
 
     private val _showValidationText = mutableStateOf(false)
     val showValidationText = _showValidationText
+
+    private val _valid = mutableStateOf(false)
+    val valid = _valid
+
 
     fun setUsername(s: String){
         _username.value = s
@@ -28,16 +33,17 @@ class LoginViewModel(private val dao: HealthRepo) : ViewModel(){
         _password.value = s
     }
 
-    suspend fun validate() : Int?{
+    fun validate(){
         viewModelScope.launch(Dispatchers.IO){
             _user_id.value = dao.getUserId(username = username.value, password = password.value)
         }
-        return if (_user_id.value != null) {
+        if (_user_id.value != null) {
+            _valid.value = true
             _showValidationText.value = false
-            _user_id.value
+
         } else{
             _showValidationText.value = true
-            _user_id.value
+            _valid.value = false
         }
     }
 }
