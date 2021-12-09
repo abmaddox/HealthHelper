@@ -13,16 +13,9 @@ import kotlinx.coroutines.launch
 fun NewVitalSignScreen(vm : NewVitalSignViewModel,
                         onCancel : ()->Unit){
     NewItemScreen(itemType = ItemTypes.uv, vm = vm, UnitSlot = {
-        Text(text = vm.subItems1.value[vm.selectedIndex1.value].unit)
-    }){
-        Button(onClick = { vm.viewModelScope.launch(Dispatchers.IO)
-            { vm.addUserItem() }.invokeOnCompletion { vm.viewModelScope.launch(Dispatchers.Main) { onCancel } }
-        }) {
-            Text(text = "Add vital sign")
-        }
 
-        Button(onClick = { onCancel }) {
-            Text(text = "Cancel")
-        }
-    }
+        Text(text = vm.subItems1.value[vm.selectedIndex1.value].unit)
+
+    },
+    onCancel = onCancel)
 }

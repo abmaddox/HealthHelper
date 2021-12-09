@@ -7,6 +7,6 @@ import java.util.*
 data class uSymptoms (
     val user_id : Int,
     val symptom_id : Int,
-    val startDate: Date?,
-    val endDate: Date?
+    val startDate: String?,
+    val endDate: String?
         )

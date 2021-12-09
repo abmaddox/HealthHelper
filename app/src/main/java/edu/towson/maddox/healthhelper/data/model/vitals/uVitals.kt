@@ -9,6 +9,6 @@ data class uVitals (
     val user_id : Int,
     val vital_id : Int,
     val rMethod_id : Int,
-    val timestamp : Date = Calendar.getInstance().time,
+    val timestamp : String = Calendar.getInstance().time.toString(),
     val measurement: Double
 )

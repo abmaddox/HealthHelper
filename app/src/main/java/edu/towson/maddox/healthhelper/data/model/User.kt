@@ -11,11 +11,11 @@ data class User(
     val user_id : Int = 0,
     val username : String,
     val password : String,
-    val accountCreated : Date = Calendar.getInstance().time,
+    val accountCreated : String = Calendar.getInstance().time.toString(),
     val email : String? = null,
     val firstName : String? = null,
     val lastName : String? = null,
-    val dateOfBirth : Date? = null,
-    val lastLogin : Date = Calendar.getInstance().time,
+    val dateOfBirth : String? = null,
+    val lastLogin : String = Calendar.getInstance().time.toString(),
     val activeAccount : Boolean = true
 )

@@ -1,19 +1,25 @@
 package edu.towson.maddox.healthhelper.ui.components
 
 import androidx.compose.foundation.layout.*
+import androidx.compose.material.Button
+import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewModelScope
 import edu.towson.maddox.healthhelper.data.model.vm.INewItemViewModel
+import edu.towson.maddox.healthhelper.data.model.vm.NewItemViewModel
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 @Composable
 fun <A,B,C,D> NewItemScreen(
     itemType: ItemTypes,
-    vm: INewItemViewModel<A, B, C, D>,
+    vm: NewItemViewModel<A, B, C, D>,
     UnitSlot : @Composable () -> Unit = {},
-    ConfirmAddAndCancelSlot : @Composable () -> Unit = {}
+    onCancel : () -> Unit
 ){
     Column(modifier = Modifier
         .fillMaxHeight()
@@ -54,6 +60,15 @@ fun <A,B,C,D> NewItemScreen(
                 StartEndDatePicker(vm = vm)
                 Spacer(modifier = Modifier.padding(10.dp))
                 BasicEntryField(value = vm.textEntry.value, setValue = {vm.updateTextEntry(it)}, label = "Reason for taking:", keyboardType = KeyboardType.Text)
+            }
+        }
+        Row(modifier = Modifier.fillMaxWidth() ,horizontalArrangement = Arrangement.SpaceEvenly ) {
+            Button(onClick = { vm.viewModelScope.launch(Dispatchers.IO) { vm.addUserItem() } ; onCancel() }) {
+                Text(text = "Add item")
+            }
+
+            Button(onClick = { onCancel() }) {
+                Text(text = "Cancel")
             }
         }
     }

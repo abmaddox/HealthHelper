@@ -8,7 +8,6 @@ import edu.towson.maddox.healthhelper.data.repo.HealthRepo
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import java.lang.Exception
 
 interface INewItemViewModel<A, B, C, D>{
 
@@ -19,6 +18,14 @@ interface INewItemViewModel<A, B, C, D>{
 
     val numeric : MutableState<Double>
     val textEntry: MutableState<String>
+
+    val startDay : MutableState<String>
+    val startMonth : MutableState<String>
+    val startYear : MutableState<String>
+
+    val endDay : MutableState<String>
+    val endMonth : MutableState<String>
+    val endYear : MutableState<String>
 
     fun updateNumeric(double : String)
     fun updateTextEntry(text : String)
@@ -61,7 +68,15 @@ interface INewItemViewModel<A, B, C, D>{
     suspend fun setSubItems3():List<C>
     suspend fun setSubItems4():List<D>
 
+    fun setStartDay(s : String)
+    fun setStartMonth(s : String)
+    fun setStartYear(s : String)
+    fun getStartDate() : String?
 
+    fun setEndDay(s : String)
+    fun setEndMonth(s : String)
+    fun setEndYear(s : String)
+    fun getEndDate() : String?
 
     fun setSelectedConditionIndex1(i : Int)
     fun toggleMenu1Expansion(b : Boolean?)
@@ -111,6 +126,8 @@ abstract class NewItemViewModel<A, B, C, D>(private val repo: HealthRepo,private
 
     private val _textEntry : MutableState<String> = mutableStateOf("")
     override val textEntry =_textEntry
+
+
 
     override fun updateNumeric(double : String) {
         try {
@@ -189,6 +206,58 @@ abstract class NewItemViewModel<A, B, C, D>(private val repo: HealthRepo,private
 
     private val _endYearSelectedIndex : MutableState<Int> = mutableStateOf(0)
     override val endYearSelectedIndex = _endYearSelectedIndex
+
+    private val _startDay : MutableState<String> = mutableStateOf("")
+    private val _startMonth : MutableState<String>  = mutableStateOf("")
+    private val _startYear : MutableState<String>  = mutableStateOf("")
+
+    private val _endDay : MutableState<String>  = mutableStateOf("")
+    private val _endMonth : MutableState<String>  = mutableStateOf("")
+    private val _endYear : MutableState<String>  = mutableStateOf("")
+
+    override val startDay = _startDay
+    override val startMonth = _startMonth
+    override val startYear = _startYear
+
+    override val endDay = _endDay
+    override val endMonth = _endMonth
+    override val endYear = _endYear
+
+    override fun setStartDay(s : String){
+        _startDay.value = s
+    }
+    override fun setStartMonth(s : String){
+        _startMonth.value = s
+    }
+    override fun setStartYear(s : String){
+        _startYear.value = s
+    }
+
+    override fun setEndDay(s : String){
+        _endDay.value = s
+    }
+    override fun setEndMonth(s : String){
+        _endMonth.value = s
+    }
+    override fun setEndYear(s : String){
+        _endYear.value = s
+    }
+
+    override fun getStartDate(): String? {
+        return if (startDay.value == "" || startMonth.value=="" || startYear.value=="")
+            null
+        else{
+            "${startYear.value}-${startMonth.value}-${startDay.value}"
+        }
+    }
+
+    override fun getEndDate(): String? {
+        return if (endDay.value == "" || endMonth.value=="" || endYear.value=="")
+            null
+        else{
+            "${endYear.value}-${endMonth.value}-${endDay.value}"
+        }
+    }
 
     init {
 

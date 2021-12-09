@@ -1,19 +1,13 @@
 package edu.towson.maddox.healthhelper.ui.screens.vitals.vitalslist
 
-import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.mutableStateOf
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
-import edu.towson.maddox.healthhelper.data.model.conditions.Condition
-import edu.towson.maddox.healthhelper.data.model.conditions.uConditions
 import edu.towson.maddox.healthhelper.data.model.vitals.RecordingMethod
 import edu.towson.maddox.healthhelper.data.model.vitals.VitalSign
 import edu.towson.maddox.healthhelper.data.model.vitals.uVitals
 import edu.towson.maddox.healthhelper.data.model.vm.ItemListViewModel
 import edu.towson.maddox.healthhelper.data.repo.HealthRepo
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 
+@ExperimentalCoroutinesApi
 class VitalsListViewModel(private val repo: HealthRepo, private val user_id : Int) :
     ItemListViewModel<uVitals, VitalSign, RecordingMethod, Int?, Int?>(repo, user_id) {
     override suspend fun setUserItems(): List<uVitals> {

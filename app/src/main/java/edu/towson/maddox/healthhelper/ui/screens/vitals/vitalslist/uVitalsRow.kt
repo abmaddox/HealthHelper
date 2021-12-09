@@ -8,7 +8,7 @@ import java.util.*
 @Composable
 fun UVitalsRow(vital: VitalSign,
                 methodName : String,
-                ts : Date,
+                ts : String,
                 meas : Double,
                 onDelete : (uVitals)->Unit) {
 
