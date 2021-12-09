@@ -9,31 +9,46 @@ import edu.towson.maddox.healthhelper.data.model.conditions.uConditions
 import edu.towson.maddox.healthhelper.data.model.vitals.RecordingMethod
 import edu.towson.maddox.healthhelper.data.model.vitals.VitalSign
 import edu.towson.maddox.healthhelper.data.model.vitals.uVitals
+import edu.towson.maddox.healthhelper.data.model.vm.ItemListViewModel
 import edu.towson.maddox.healthhelper.data.repo.HealthRepo
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-class VitalsListViewModel(private val repo: HealthRepo, private val user_id : Int) : ViewModel() {
-    private val _userVitals: MutableState<List<uVitals>> = mutableStateOf(listOf())
-    val userVitals = _userVitals
-
-    private val _vitals: MutableState<List<VitalSign>> = mutableStateOf(listOf())
-    val vitals = _vitals
-
-    private val _methods: MutableState<List<RecordingMethod>> = mutableStateOf(listOf())
-    val methods = _methods
-
-    init {
-        viewModelScope.launch(Dispatchers.IO){
-            _userVitals.value = repo.getUserVitals(user_id)
-            _methods.value = repo.getRecordingMethods()
-        }
-    }
-    fun getVital(vital_id : Int): VitalSign {
-        return _vitals.value.filter { it.vital_id == vital_id }[0]
+class VitalsListViewModel(private val repo: HealthRepo, private val user_id : Int) :
+    ItemListViewModel<uVitals, VitalSign, RecordingMethod, Int?, Int?>(repo, user_id) {
+    override suspend fun setUserItems(): List<uVitals> {
+        return repo.getUserVitals(user_id)
     }
 
-    fun getMethod(method_id : Int): String {
-        return _methods.value.filter { it.rMethod_id == method_id }[0].toString()
+    override suspend fun setSubItems1(): List<VitalSign> {
+        return repo.getVitalSigns()
+    }
+
+    override suspend fun setSubItems2(): List<RecordingMethod> {
+        return repo.getRecordingMethods()
+    }
+
+    override suspend fun setSubItems3(): List<Int?> {
+        return listOf()
+    }
+
+    override suspend fun setSubItems4(): List<Int?> {
+        return listOf()
+    }
+
+    override fun getSubItem1(subitem_id: Int): VitalSign {
+        return subItems1.value.filter { it.vital_id == subitem_id }[0]
+    }
+
+    override fun getSubItem2(subitem_id: Int): RecordingMethod {
+        return subItems2.value.filter { it.rMethod_id == subitem_id }[0]
+    }
+
+    override fun getSubItem3(subitem_id: Int): Int? {
+        return null
+    }
+
+    override fun getSubItem4(subitem_id: Int): Int? {
+        return null
     }
 }

@@ -3,7 +3,11 @@ package edu.towson.maddox.healthhelper.data.model.vm
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import edu.towson.maddox.healthhelper.data.repo.HealthRepo
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.lang.Exception
 
 interface INewItemViewModel<A, B, C, D>{
@@ -49,6 +53,15 @@ interface INewItemViewModel<A, B, C, D>{
     val isEndYearExpanded : MutableState<Boolean>
     val endYearSelectedIndex : MutableState<Int>
 
+    suspend fun setItems()
+    suspend fun addUserItem()
+
+    suspend fun setSubItems1(): List<A>
+    suspend fun setSubItems2():List<B>
+    suspend fun setSubItems3():List<C>
+    suspend fun setSubItems4():List<D>
+
+
 
     fun setSelectedConditionIndex1(i : Int)
     fun toggleMenu1Expansion(b : Boolean?)
@@ -82,7 +95,7 @@ interface INewItemViewModel<A, B, C, D>{
 
 }
 
-open class NewItemViewModel<A, B, C, D>(repo: HealthRepo, user_id : Int, sub1 : List<A>, sub2 : List<B>, sub3 : List<C>, sub4 : List<D> ) : ViewModel(), INewItemViewModel<A,B,C,D>{
+abstract class NewItemViewModel<A, B, C, D>(private val repo: HealthRepo,private val user_id : Int) : ViewModel(), INewItemViewModel<A,B,C,D>{
     private val _subItems1: MutableState<List<A>> = mutableStateOf(listOf())
     private val _subItems2: MutableState<List<B>> = mutableStateOf(listOf())
     private val _subItems3: MutableState<List<C>> = mutableStateOf(listOf())
@@ -110,6 +123,7 @@ open class NewItemViewModel<A, B, C, D>(repo: HealthRepo, user_id : Int, sub1 : 
     override fun updateTextEntry(text : String) {
         _textEntry.value = text
     }
+
 
     private val _isMenu1Expanded : MutableState<Boolean> = mutableStateOf(false)
     override val isMenu1Expanded = _isMenu1Expanded
@@ -177,11 +191,38 @@ open class NewItemViewModel<A, B, C, D>(repo: HealthRepo, user_id : Int, sub1 : 
     override val endYearSelectedIndex = _endYearSelectedIndex
 
     init {
-        _subItems1.value = sub1
-        _subItems2.value = sub2
-        _subItems3.value = sub3
-        _subItems4.value = sub4
+
+        viewModelScope.launch(Dispatchers.Main)
+        {
+            setItems()
+        }
     }
+
+    override suspend fun setItems(){
+        _subItems1.value =
+            withContext(viewModelScope.coroutineContext + Dispatchers.IO) {
+                setSubItems1()
+            }
+        _subItems2.value =
+            withContext(viewModelScope.coroutineContext + Dispatchers.IO) {
+                setSubItems2()
+            }
+        _subItems3.value =
+            withContext(viewModelScope.coroutineContext + Dispatchers.IO) {
+                setSubItems3()
+            }
+        _subItems4.value =
+            withContext(viewModelScope.coroutineContext + Dispatchers.IO) {
+                setSubItems4()
+            }
+    }
+
+    abstract override suspend fun setSubItems1(): List<A>
+    abstract override suspend fun setSubItems2():List<B>
+    abstract override suspend fun setSubItems3():List<C>
+    abstract override suspend fun setSubItems4():List<D>
+
+    abstract override suspend fun addUserItem(    )
 
     override fun setSelectedConditionIndex1(i : Int){
         _selectedIndex1.value = i

@@ -6,10 +6,25 @@ import edu.towson.maddox.healthhelper.data.repo.HealthRepo
 
 class NewConditionViewModel(
     private val repo: HealthRepo,
-    private val user_id: Int,
-    sub1: List<Symptom>,
-    sub2: List<Int?>,
-    sub3: List<Int?>,
-    sub4: List<Int?>
-) : NewItemViewModel<Symptom, Int?, Int?, Int?>(repo, user_id, sub1, sub2, sub3, sub4) {
+    private val user_id: Int
+) : NewItemViewModel<Symptom, Int?, Int?, Int?>(repo, user_id) {
+    override suspend fun setSubItems1(): List<Symptom> {
+        TODO("Not yet implemented")
+    }
+
+    override suspend fun setSubItems2(): List<Int?> {
+        TODO("Not yet implemented")
+    }
+
+    override suspend fun setSubItems3(): List<Int?> {
+        TODO("Not yet implemented")
+    }
+
+    override suspend fun setSubItems4(): List<Int?> {
+        TODO("Not yet implemented")
+    }
+
+    override suspend fun addUserItem() {
+        TODO("Not yet implemented")
+    }
 }

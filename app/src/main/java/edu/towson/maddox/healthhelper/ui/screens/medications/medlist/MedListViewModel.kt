@@ -5,46 +5,47 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import edu.towson.maddox.healthhelper.data.model.medications.*
+import edu.towson.maddox.healthhelper.data.model.vm.ItemListViewModel
 import edu.towson.maddox.healthhelper.data.repo.HealthRepo
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-class MedListViewModel(private val repo: HealthRepo, private val user_id : Int) : ViewModel() {
-    private val _userMedications: MutableState<List<uMedications>> = mutableStateOf(listOf())
-    val userMedications = _userMedications
-
-    private val _medications: MutableState<List<Medication>> = mutableStateOf(listOf())
-    val medications = _medications
-
-    private val _frequencies: MutableState<List<Frequency>> = mutableStateOf(listOf())
-
-    private val _methods: MutableState<List<AdministrationMethod>> = mutableStateOf(listOf())
-
-    private val _units: MutableState<List<DoseUnit>> = mutableStateOf(listOf())
-
-    init {
-        viewModelScope.launch(Dispatchers.IO){
-            _userMedications.value = repo.getUserMeds(user_id)
-            _methods.value = repo.getAdminMethods()
-            _medications.value = repo.getMedication()
-            _frequencies.value = repo.getFrequencies()
-            _units.value = repo.getDoseUnits()
-        }
+class MedListViewModel(private val repo: HealthRepo, private val user_id : Int) :
+    ItemListViewModel<uMedications, Medication, Frequency, AdministrationMethod, DoseUnit>(repo, user_id) {
+    override suspend fun setUserItems(): List<uMedications> {
+        return repo.getUserMeds(user_id)
     }
 
-    fun getMed(med_id : Int): Medication {
-        return _medications.value.filter { it.medication_id == med_id }[0]
+    override suspend fun setSubItems1(): List<Medication> {
+        return repo.getMedication()
     }
 
-    fun getFreq(frequencyId: Int): Frequency {
-        return _frequencies.value.filter { it.frequency_id == frequencyId }[0]
+    override suspend fun setSubItems2(): List<Frequency> {
+        return repo.getFrequencies()
     }
 
-    fun getMethod(methodId: Int): AdministrationMethod {
-        return _methods.value.filter { it.method_id == methodId }[0]
+    override suspend fun setSubItems3(): List<AdministrationMethod> {
+        return repo.getAdminMethods()
     }
 
-    fun getUnit(unitId: Int): DoseUnit {
-        return _units.value.filter { it.unit_id == unitId }[0]
+    override suspend fun setSubItems4(): List<DoseUnit> {
+        return repo.getDoseUnits()
     }
+
+    override fun getSubItem1(subitem_id: Int): Medication {
+        return subItems1.value.filter { it.medication_id == subitem_id }[0]
+    }
+
+    override fun getSubItem2(subitem_id: Int): Frequency {
+        return subItems2.value.filter { it.frequency_id == subitem_id }[0]
+    }
+
+    override fun getSubItem3(subitem_id: Int): AdministrationMethod {
+        return subItems3.value.filter { it.method_id == subitem_id }[0]
+    }
+
+    override fun getSubItem4(subitem_id: Int): DoseUnit {
+        return subItems4.value.filter { it.unit_id == subitem_id }[0]
+    }
+
 }

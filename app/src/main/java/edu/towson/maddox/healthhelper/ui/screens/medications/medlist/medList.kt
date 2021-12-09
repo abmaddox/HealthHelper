@@ -9,7 +9,7 @@ import androidx.compose.material.FabPosition
 import androidx.compose.material.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import edu.towson.maddox.healthhelper.data.model.medications.*
+import edu.towson.maddox.healthhelper.data.model.medications.uMedications
 
 @ExperimentalFoundationApi
 @Composable
@@ -24,13 +24,13 @@ fun MedList(onDelete: (uMedications) -> Unit,
         LazyColumn(modifier = Modifier
             .fillMaxWidth()
             .fillMaxHeight()){
-            itemsIndexed(vm.userMedications.value){
+            itemsIndexed(vm.userItems.value){
                     _, umed ->
                 UMedicationRow(
-                    med = vm.getMed(umed.medication_id),
-                    freq = vm.getFreq(umed.frequency_id),
-                    method = vm.getMethod(umed.method_id),
-                    unit = vm.getUnit(umed.unit_id),
+                    med = vm.getSubItem1(umed.medication_id),
+                    freq = vm.getSubItem2(umed.frequency_id),
+                    method = vm.getSubItem3(umed.method_id),
+                    unit = vm.getSubItem4(umed.unit_id),
                     uMedications = umed,
                     onDelete = { onDelete(umed) }
                 )

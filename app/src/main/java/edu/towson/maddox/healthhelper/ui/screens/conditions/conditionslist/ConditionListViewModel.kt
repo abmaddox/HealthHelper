@@ -19,11 +19,11 @@ class ConditionListViewModel(private val repo : HealthRepo, private val user_id 
         return repo.getConditions()
     }
 
-    override fun setSubItems2(): List<Int?> {return listOf()}
+    override suspend fun setSubItems2(): List<Int?> {return listOf()}
 
-    override fun setSubItems3(): List<Int?> {return listOf()}
+    override suspend fun setSubItems3(): List<Int?> {return listOf()}
 
-    override fun setSubItems4(): List<Int?> {return listOf()}
+    override suspend fun setSubItems4(): List<Int?> {return listOf()}
 
     override fun getSubItem1(subitem_id : Int): Condition {
        return super.subItems1.value.filter { subitem_id == it.condition_id }[0]

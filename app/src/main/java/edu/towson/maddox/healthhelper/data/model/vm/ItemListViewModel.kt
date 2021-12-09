@@ -18,9 +18,9 @@ interface IItemListViewModel<A,B,C,D,E>{
 
     suspend fun setUserItems(): List<A>
     suspend fun setSubItems1(): List<B>
-    fun setSubItems2(): List<C>
-    fun setSubItems3(): List<D>
-    fun setSubItems4(): List<E>
+    suspend fun setSubItems2(): List<C>
+    suspend fun setSubItems3(): List<D>
+    suspend fun setSubItems4(): List<E>
 
     fun getSubItem1(subitem_id : Int):B
     fun getSubItem2(subitem_id : Int):C
@@ -30,7 +30,8 @@ interface IItemListViewModel<A,B,C,D,E>{
     suspend fun<A> addUserItem(item : A)
 }
 
-open abstract class ItemListViewModel<A,B,C,D,E>(private val repo: HealthRepo, private val user_id : Int): ViewModel(), IItemListViewModel<A,B,C,D,E>{
+@ExperimentalCoroutinesApi
+abstract class ItemListViewModel<A,B,C,D,E>(private val repo: HealthRepo, private val user_id : Int): ViewModel(), IItemListViewModel<A,B,C,D,E>{
     private val _userItems : MutableState<List<A>> = mutableStateOf(listOf())
     private val _subItems1 : MutableState<List<B>> = mutableStateOf(listOf())
     private val _subItems2 : MutableState<List<C>> = mutableStateOf(listOf())
@@ -47,7 +48,7 @@ open abstract class ItemListViewModel<A,B,C,D,E>(private val repo: HealthRepo, p
     override val subItems4 = _subItems4
 
     init {
-        viewModelScope.launch(Dispatchers.IO)
+        viewModelScope.launch(Dispatchers.Main)
         {
             setItems()
         }
@@ -79,9 +80,9 @@ open abstract class ItemListViewModel<A,B,C,D,E>(private val repo: HealthRepo, p
 
     abstract override suspend fun setUserItems():List<A>
     abstract override suspend fun setSubItems1():List<B>
-    abstract override fun setSubItems2():List<C>
-    abstract override fun setSubItems3():List<D>
-    abstract override fun setSubItems4():List<E>
+    abstract override suspend fun setSubItems2():List<C>
+    abstract override suspend fun setSubItems3():List<D>
+    abstract override suspend fun setSubItems4():List<E>
 
     abstract override fun getSubItem1(subitem_id : Int):B
     abstract override fun getSubItem2(subitem_id : Int):C

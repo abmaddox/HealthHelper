@@ -22,11 +22,11 @@ fun VitalsList(onDelete: (uVitals) -> Unit,
         LazyColumn(modifier = Modifier
             .fillMaxWidth()
             .fillMaxHeight()){
-            itemsIndexed(vm.userVitals.value){
-                    _, uv ->
+            itemsIndexed(vm.userItems.value){
+                    _, uv->
                 UVitalsRow(
-                    vital = vm.getVital(uv.vital_id),
-                    methodName = vm.getMethod(uv.rMethod_id),
+                    vital = vm.getSubItem1(uv.vital_id),
+                    methodName = vm.getSubItem2(uv.rMethod_id).toString(),
                     ts = uv.timestamp,
                     meas = uv.measurement,
                     onDelete = onDelete
