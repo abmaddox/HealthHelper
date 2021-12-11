@@ -1,6 +1,8 @@
 package edu.towson.maddox.healthhelper.db
 
+import android.content.Context
 import androidx.room.Database
+import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 import edu.towson.maddox.healthhelper.data.model.Converters
@@ -36,4 +38,18 @@ import edu.towson.maddox.healthhelper.data.model.vitals.uVitals
 @TypeConverters(Converters::class)
 abstract class DB : RoomDatabase() {
     abstract fun healthDAO() : HealthDAO
+    companion object {
+        private var INSTANCE: DB? = null
+        fun getDatabase(context: Context): DB {
+            if (INSTANCE == null) {
+                synchronized(this) {
+                    INSTANCE =
+                        Room.databaseBuilder(context, DB::class.java, "HealthDB")
+                            .createFromAsset("databases/HealthDB.db")
+                            .build()
+                }
+            }
+            return INSTANCE!!
+        }
+    }
 }

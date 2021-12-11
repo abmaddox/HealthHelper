@@ -7,7 +7,6 @@ import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
-import androidx.room.Room
 import edu.towson.maddox.healthhelper.db.DB
 import edu.towson.maddox.healthhelper.nav.Root
 import edu.towson.maddox.healthhelper.ui.theme.HealthHelperTheme
@@ -23,11 +22,7 @@ class MainActivity : ComponentActivity() {
             HealthHelperTheme {
                 // A surface container using the 'background' color from the theme
                 Surface(color = MaterialTheme.colors.background) {
-                    val db : DB = Room.databaseBuilder(
-                        applicationContext,
-                        DB::class.java, "HealthDB"
-                    ).fallbackToDestructiveMigration().build()
-
+                    val db : DB = DB.getDatabase(this)
                     Root(db = db)
 
                 }

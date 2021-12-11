@@ -7,14 +7,12 @@ import androidx.compose.material.Icon
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.viewModelScope
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
@@ -42,9 +40,7 @@ import edu.towson.maddox.healthhelper.ui.screens.viewmodels.riskfactors.NewRiskF
 import edu.towson.maddox.healthhelper.ui.screens.viewmodels.riskfactors.RiskFactorsListViewModel
 import edu.towson.maddox.healthhelper.ui.screens.viewmodels.vitals.NewVitalSignViewModel
 import edu.towson.maddox.healthhelper.ui.screens.viewmodels.vitals.VitalSignListViewModel
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.launch
 
 @ExperimentalCoroutinesApi
 @ExperimentalFoundationApi
@@ -72,17 +68,6 @@ fun Root(db : DB) {
 
             val repo = HealthRepo(db.healthDAO())
 
-        //TODO move vm into navHost
-            val loginViewModel = LoginViewModel(repo)
-
-        //TODO remove launched effect
-        LaunchedEffect(true)
-        {
-            loginViewModel.viewModelScope.launch(Dispatchers.IO) {
-                repo.insertDummyValues()
-            }
-        }
-
             val userId = rememberSaveable { mutableStateOf(0) }
             val navController = rememberNavController()
 
@@ -91,6 +76,7 @@ fun Root(db : DB) {
                 //Login page
                 composable(Routes.Login.route)
                 {
+                    val loginViewModel = LoginViewModel(repo)
                     Login(vm = loginViewModel,
                         onLoginClick = { user_id ->
                             userId.value = user_id
