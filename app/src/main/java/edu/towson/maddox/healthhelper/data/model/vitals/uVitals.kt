@@ -1,6 +1,5 @@
 package edu.towson.maddox.healthhelper.data.model.vitals
 
-import android.location.GnssMeasurement
 import androidx.room.Entity
 import java.util.*
 

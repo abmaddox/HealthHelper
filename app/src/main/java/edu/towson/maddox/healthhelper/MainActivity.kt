@@ -8,15 +8,13 @@ import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.room.Room
-import androidx.room.RoomDatabase
-import androidx.sqlite.db.SupportSQLiteDatabase
 import edu.towson.maddox.healthhelper.db.DB
 import edu.towson.maddox.healthhelper.nav.Root
 import edu.towson.maddox.healthhelper.ui.theme.HealthHelperTheme
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 
 class MainActivity : ComponentActivity() {
+    @ExperimentalCoroutinesApi
     @ExperimentalFoundationApi
     @ExperimentalMaterialApi
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -30,8 +28,7 @@ class MainActivity : ComponentActivity() {
                         DB::class.java, "HealthDB"
                     ).fallbackToDestructiveMigration().build()
 
-                    val scope = CoroutineScope(Dispatchers.IO)
-                    Root(db = db, scope)
+                    Root(db = db)
 
                 }
             }

@@ -8,8 +8,8 @@ import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
@@ -91,4 +91,29 @@ fun ComposeMenu(
             }
         }
     }
+}
+
+@Preview
+@Composable
+fun TestComposeMenu(){
+    Row(horizontalArrangement = Arrangement.SpaceEvenly) {
+        ComposeMenu(
+            menuItems = (1..20).map { i -> i.toString() },
+            menuExpandedState = false,
+            selectedIndex = 0,
+            updateMenuExpandStatus = { },
+            onDismissMenuView = {  },
+            onMenuItemClick = { }
+        )
+
+        ComposeMenu(
+            menuItems = (1..20).map { i -> i.toString() },
+            menuExpandedState = true,
+            selectedIndex = 0,
+            updateMenuExpandStatus = { },
+            onDismissMenuView = {  },
+            onMenuItemClick = { }
+        )
+    }
+
 }

@@ -4,7 +4,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
-import edu.towson.maddox.healthhelper.data.model.vm.INewItemViewModel
+import edu.towson.maddox.healthhelper.ui.screens.viewmodels.generics.INewItemViewModel
 import java.time.LocalDate
 
 @Composable

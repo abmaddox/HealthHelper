@@ -1,7 +1,6 @@
 package edu.towson.maddox.healthhelper.data.model.medications
 
 import androidx.room.Entity
-import java.util.*
 
 @Entity(primaryKeys = ["user_id", "medication_id", "frequency_id", "method_id", "unit_id"])
 data class uMedications (
@@ -11,7 +10,7 @@ data class uMedications (
     val method_id : Int,
     val unit_id : Int,
     val startDate: String,
-    val endDate: String?,
-    val reason : String?,
+    val endDate: String,
+    val reason : String = "",
     val dosage : Double
     )

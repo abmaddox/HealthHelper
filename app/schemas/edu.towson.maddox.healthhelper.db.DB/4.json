@@ -1,8 +1,8 @@
 {
   "formatVersion": 1,
   "database": {
-    "version": 3,
-    "identityHash": "eebec73e21edcb3101cddac728b735c4",
+    "version": 4,
+    "identityHash": "abe3f23cb20faefc99edaf4ceb000501",
     "entities": [
       {
         "tableName": "user",
@@ -430,7 +430,7 @@
       },
       {
         "tableName": "uMedications",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`user_id` INTEGER NOT NULL, `medication_id` INTEGER NOT NULL, `frequency_id` INTEGER NOT NULL, `method_id` INTEGER NOT NULL, `unit_id` INTEGER NOT NULL, `startDate` TEXT NOT NULL, `endDate` TEXT NOT NULL, `reason` TEXT, `dosage` REAL NOT NULL, PRIMARY KEY(`user_id`, `medication_id`, `frequency_id`, `method_id`, `unit_id`))",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`user_id` INTEGER NOT NULL, `medication_id` INTEGER NOT NULL, `frequency_id` INTEGER NOT NULL, `method_id` INTEGER NOT NULL, `unit_id` INTEGER NOT NULL, `startDate` TEXT NOT NULL, `endDate` TEXT NOT NULL, `reason` TEXT NOT NULL, `dosage` REAL NOT NULL, PRIMARY KEY(`user_id`, `medication_id`, `frequency_id`, `method_id`, `unit_id`))",
         "fields": [
           {
             "fieldPath": "user_id",
@@ -478,7 +478,7 @@
             "fieldPath": "reason",
             "columnName": "reason",
             "affinity": "TEXT",
-            "notNull": false
+            "notNull": true
           },
           {
             "fieldPath": "dosage",
@@ -569,7 +569,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'eebec73e21edcb3101cddac728b735c4')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'abe3f23cb20faefc99edaf4ceb000501')"
     ]
   }
 }

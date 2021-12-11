@@ -1,6 +1,5 @@
 package edu.towson.maddox.healthhelper.nav
 
-import android.util.Log
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.ExperimentalMaterialApi
@@ -14,40 +13,40 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.viewModelScope
-import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import androidx.navigation.navArgument
 import edu.towson.maddox.healthhelper.R
-import edu.towson.maddox.healthhelper.data.model.conditions.Condition
-import edu.towson.maddox.healthhelper.data.model.conditions.uConditions
-import edu.towson.maddox.healthhelper.data.model.riskFactors.RiskFactor
-import edu.towson.maddox.healthhelper.data.model.riskFactors.uRiskFactors
 import edu.towson.maddox.healthhelper.data.repo.HealthRepo
 import edu.towson.maddox.healthhelper.db.DB
-import edu.towson.maddox.healthhelper.ui.components.FAB
-import edu.towson.maddox.healthhelper.ui.screens.conditions.conditionslist.ConditionList
-import edu.towson.maddox.healthhelper.ui.screens.conditions.conditionslist.ConditionListViewModel
-import edu.towson.maddox.healthhelper.ui.screens.conditions.newcondition.NewCondition
-import edu.towson.maddox.healthhelper.ui.screens.conditions.newcondition.NewConditionViewModel
-import edu.towson.maddox.healthhelper.ui.screens.main.home.Home
-import edu.towson.maddox.healthhelper.ui.screens.main.login.Login
-import edu.towson.maddox.healthhelper.ui.screens.main.login.LoginViewModel
-import edu.towson.maddox.healthhelper.ui.screens.main.signup.Signup
-import edu.towson.maddox.healthhelper.ui.screens.main.signup.SignupViewModel
-import edu.towson.maddox.healthhelper.ui.screens.vitals.newvital.NewVitalSignScreen
-import edu.towson.maddox.healthhelper.ui.screens.vitals.newvital.NewVitalSignViewModel
-import edu.towson.maddox.healthhelper.ui.screens.vitals.vitalslist.VitalsListViewModel
-import kotlinx.coroutines.*
-import java.util.*
+import edu.towson.maddox.healthhelper.ui.screens.composables.conditions.ConditionList
+import edu.towson.maddox.healthhelper.ui.screens.composables.conditions.NewConditionScreen
+import edu.towson.maddox.healthhelper.ui.screens.composables.main.Home
+import edu.towson.maddox.healthhelper.ui.screens.composables.main.Login
+import edu.towson.maddox.healthhelper.ui.screens.composables.main.Signup
+import edu.towson.maddox.healthhelper.ui.screens.composables.medications.MedicationList
+import edu.towson.maddox.healthhelper.ui.screens.composables.medications.NewMedicationScreen
+import edu.towson.maddox.healthhelper.ui.screens.composables.riskfactors.NewRiskFactorScreen
+import edu.towson.maddox.healthhelper.ui.screens.composables.riskfactors.RiskFactorsList
+import edu.towson.maddox.healthhelper.ui.screens.composables.vitals.VitalSignList
+import edu.towson.maddox.healthhelper.ui.screens.composables.vitals.newvital.NewVitalSignScreen
+import edu.towson.maddox.healthhelper.ui.screens.viewmodels.conditions.ConditionListViewModel
+import edu.towson.maddox.healthhelper.ui.screens.viewmodels.conditions.NewConditionViewModel
+import edu.towson.maddox.healthhelper.ui.screens.viewmodels.main.LoginViewModel
+import edu.towson.maddox.healthhelper.ui.screens.viewmodels.main.SignupViewModel
+import edu.towson.maddox.healthhelper.ui.screens.viewmodels.medications.MedListViewModel
+import edu.towson.maddox.healthhelper.ui.screens.viewmodels.medications.NewMedViewModel
+import edu.towson.maddox.healthhelper.ui.screens.viewmodels.riskfactors.NewRiskFactorViewModel
+import edu.towson.maddox.healthhelper.ui.screens.viewmodels.riskfactors.RiskFactorsListViewModel
+import edu.towson.maddox.healthhelper.ui.screens.viewmodels.vitals.NewVitalSignViewModel
+import edu.towson.maddox.healthhelper.ui.screens.viewmodels.vitals.VitalSignListViewModel
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 
 @ExperimentalCoroutinesApi
 @ExperimentalFoundationApi
 @ExperimentalMaterialApi
 @Composable
-fun Root(db : DB, scope : CoroutineScope) {
+fun Root(db : DB) {
     Scaffold(
         topBar = {
             Row(
@@ -67,169 +66,198 @@ fun Root(db : DB, scope : CoroutineScope) {
         }
     ) {
 
-        val repo = HealthRepo(db.healthDAO())
+            val repo = HealthRepo(db.healthDAO())
 
-        testDatabaseFill(scope, repo)
+            val loginViewModel = LoginViewModel(repo)
+            val signupViewModel = SignupViewModel(repo)
+            val userId = rememberSaveable { mutableStateOf(0) }
+            val navController = rememberNavController()
+            NavHost(navController = navController, startDestination = Routes.Login.route) {
 
-        val loginViewModel = LoginViewModel(repo)
-        val signupViewModel = SignupViewModel(repo)
-        val userId = rememberSaveable { mutableStateOf(0) }
-        val navController = rememberNavController()
-        NavHost(navController = navController, startDestination = Routes.Login.route) {
-
-            //Login page with no prefill
-            composable(Routes.Login.route) {
-                Login(vm = loginViewModel,
-                    onLoginClick = { user_id ->
-                        userId.value = user_id
-                        navController.navigate(Routes.Home.route)
-                    },
-                    onSignupClick = { navController.navigate(Routes.Signup.route) })
-            }
-
-            //Login page with prefilled username after signing up
-            composable(Routes.Login.route + "/{username}",
-                arguments = listOf(navArgument("username") { type = NavType.StringType })
-            ) {
-                Login(username = it.arguments!!.get("username").toString(), vm = loginViewModel,
-                    onLoginClick = { user_id ->
-                        userId.value = user_id
-                        navController.navigate(Routes.Home.route)
-                    },
-                    onSignupClick = { navController.navigate(Routes.Signup.route) })
-            }
-
-            //Signup page
-            composable(Routes.Signup.route) {
-                Signup(onSignupClick = { username -> navController.navigate(Routes.Login.route + "/${username}") },
-                    onCancelClick = { navController.navigate(Routes.Login.route) },
-                    vm = signupViewModel
-                )
-            }
-
-
-            //Main menu
-            composable(Routes.Home.route) {
-                Home(
-                    user_id = userId.value,
-                    onConditionsClick = {
-                        navController.navigate(Routes.Conditions.route)
-                    },
-                    onMedicationsClick = {
-                        navController.navigate(Routes.Medications.route)
-                    },
-                    onRiskFactorsClick = {
-                        navController.navigate(Routes.RiskFactors.route)
-                    },
-                    onSymptomsClick = {
-                        navController.navigate(Routes.Symptoms.route)
-                    },
-                    onVitalsClick = {
-                        navController.navigate(Routes.Vitals.route)
-                    }
-                )
-            }
-
-
-
-            //VITALS
-            val vitalsListViewModel = VitalsListViewModel(repo, userId.value)
-            val newVitalSignViewModel = NewVitalSignViewModel(repo, user_id = userId.value)
-
-
-            //Vital Sign main page
-            composable(Routes.Vitals.route) { }
-
-            //Add new vital sign page
-            composable(Routes.AddVital.route) {
-                NewVitalSignScreen(vm = newVitalSignViewModel) {
-                    navController.navigate(Routes.Vitals.route) {
-                        launchSingleTop = true
-                    }
-                }
-            }
-
-
-            //CONDITIONS
-            val conditionListViewModel = ConditionListViewModel(repo, userId.value)
-            val newConditionViewModel = NewConditionViewModel(repo, user_id = userId.value)
-
-            //Conditions main page
-            composable(Routes.Conditions.route)
-            { ConditionList(onDelete =
+                //Login page
+                composable(Routes.Login.route)
                 {
-                    conditionListViewModel.viewModelScope.launch(Dispatchers.IO)
-                    {
-                        repo.deleteUserConditions(
-                            uc = it
-                        )
-                    }
-                }, vm = conditionListViewModel, {
-                    FAB(onClick = {
-                        navController.navigate(Routes.AddCondition.route) {
+                    Login(vm = loginViewModel,
+                        onLoginClick = { user_id ->
+                            userId.value = user_id
+                            navController.navigate(Routes.Home.route){
+                                launchSingleTop = true
+                            }
+                        },
+                        onSignupClick = { navController.navigate(Routes.Signup.route){
+                            launchSingleTop = true
+                        } })
+                }
+
+                //Signup page
+                composable(Routes.Signup.route)
+                {
+                    Signup(onSignupClick = { navController.navigate(Routes.Login.route){
+                        launchSingleTop = true
+                    } },
+                        onCancelClick = { navController.navigate(Routes.Login.route){
+                            launchSingleTop = true
+                        } },
+                        vm = signupViewModel
+                    )
+                }
+
+
+                //Main menu
+                composable(Routes.Home.route)
+                {
+                    Home(
+                        user_id = userId.value,
+                        onConditionsClick = {
+                            navController.navigate(Routes.Conditions.route){
+                                launchSingleTop = true
+                            }
+                        },
+                        onMedicationsClick = {
+                            navController.navigate(Routes.Medications.route){
+                                launchSingleTop = true
+                            }
+                        },
+                        onRiskFactorsClick = {
+                            navController.navigate(Routes.RiskFactors.route){
+                                launchSingleTop = true
+                            }
+                        },
+                        onSymptomsClick = {
+                            navController.navigate(Routes.Symptoms.route){
+                                launchSingleTop = true
+                            }
+                        },
+                        onVitalsClick = {
+                            navController.navigate(Routes.Vitals.route){
+                                launchSingleTop = true
+                            }
+                        }
+                    )
+                }
+
+
+                //VITALS
+
+                //Vital Sign main page
+                composable(Routes.Vitals.route)
+                {
+                    val vitalsListViewModel = VitalSignListViewModel(repo, userId.value)
+                    VitalSignList(vm = vitalsListViewModel) {
+                        navController.navigate(Routes.AddVital.route){
                             launchSingleTop = true
                         }
                     }
-                    )
-                })
-            }
+                }
 
-            //Add new condition page
-            composable(Routes.AddCondition.route) {
-                NewCondition(vm = newConditionViewModel,
-                    onCancel = {navController.navigate(Routes.Conditions.route) {
-                    launchSingleTop = true
-                }})
-            }
+                //Add new vital sign page
+                composable(Routes.AddVital.route)
+                {
+                    val newVitalSignViewModel = NewVitalSignViewModel(repo, user_id = userId.value)
+                    NewVitalSignScreen(vm = newVitalSignViewModel)
+                    {
+                        navController.navigate(Routes.Vitals.route)
+                        {
+                            launchSingleTop = true
+                        }
+                    }
+                }
+
+
+                //CONDITIONS
+
+                //Conditions main page
+                composable(Routes.Conditions.route)
+                {
+                    val conditionListViewModel = ConditionListViewModel(repo, userId.value)
+                    ConditionList(vm = conditionListViewModel) {
+                        navController.navigate(Routes.AddCondition.route){
+                            launchSingleTop = true
+                        }
+                    }
+                }
+
+                //Add new condition page
+                composable(Routes.AddCondition.route)
+                {
+                    val newConditionViewModel = NewConditionViewModel(repo, user_id = userId.value)
+                    NewConditionScreen(vm = newConditionViewModel) {
+                        navController.navigate(Routes.Conditions.route){
+                            launchSingleTop = true
+                        }
+                    }
+                }
 
 
                 //MEDICATIONS
+
                 //Medications main page
-                composable(Routes.Medications.route) { }
+                composable(Routes.Medications.route)
+                {
+                    val medListViewModel = MedListViewModel(repo, userId.value)
+                    MedicationList(vm = medListViewModel) {
+                        navController.navigate(Routes.AddMedication.route){
+                            launchSingleTop = true
+                        }
+                    }
+                }
                 //Add new medication page
-                composable(Routes.AddMedication.route) { }
+                composable(Routes.AddMedication.route)
+                {
+                    val newMedViewModel = NewMedViewModel(repo, userId.value)
+                    NewMedicationScreen(vm = newMedViewModel) {
+                        navController.navigate(Routes.Medications.route){
+                            launchSingleTop = true
+                        }
+                    }
+                }
 
 
                 //RISK_FACTORS
                 //Risk factors main page
-                composable(Routes.RiskFactors.route) { }
+                composable(Routes.RiskFactors.route)
+                {
+                    val riskFactorsListViewModel = RiskFactorsListViewModel(repo, userId.value)
+                    RiskFactorsList(vm = riskFactorsListViewModel) {
+                        navController.navigate(Routes.AddRiskFactor.route){
+                            launchSingleTop = true
+                        }
+                    }
+                }
                 //Add new risk factor page
-                composable(Routes.AddRiskFactor.route) { }
+                composable(Routes.AddRiskFactor.route)
+                {
+                    val newRiskFactorViewModel = NewRiskFactorViewModel(repo, userId.value)
+                    NewRiskFactorScreen(vm = newRiskFactorViewModel) {
+                        navController.navigate(Routes.RiskFactors.route){
+                            launchSingleTop = true
+                        }
+                    }
+                }
 
 
                 //SYMPTOMS
                 //Symptoms main page
-                composable(Routes.Symptoms.route) { }
+                composable(Routes.Symptoms.route)
+                {
+                    val conditionListViewModel = ConditionListViewModel(repo, userId.value)
+                    ConditionList(vm = conditionListViewModel) {
+                        navController.navigate(Routes.AddSymptom.route){
+                            launchSingleTop = true
+                        }
+                    }
+                }
                 //Add new symptom page
-                composable(Routes.AddSymptom.route) { }
-            }
-        }
-    }
-fun testDatabaseFill(scope: CoroutineScope, repo: HealthRepo) {
-    scope.launch(Dispatchers.IO) {
-        val clist = scope.async(Dispatchers.IO) { repo.getConditions() }
-        scope.launch(Dispatchers.IO)
-        {
-            if (clist.isCompleted) {
-                Log.d("testing", clist.await().toString())
-                if (clist.await().isEmpty()) {
-                    repo.insertConditions(Condition(0, "Influenza"))
-                    repo.insertConditions(Condition(0, "Influenza"))
-                    repo.insertRiskFactors(RiskFactor(0, "Obesity"))
-                    repo.insertRiskFactors(RiskFactor(0, "Asthma"))
-                    repo.insertUserConditions(
-                        uConditions(
-                            1,
-                            1,
-                            Calendar.getInstance().time.toString(),
-                            null
-                        )
-                    )
-                    repo.insertUserRiskFactors(uRiskFactors(1, 1))
-                    repo.insertUserRiskFactors(uRiskFactors(1, 2))
+                composable(Routes.AddSymptom.route)
+                {
+                    val newConditionListViewModel = NewConditionViewModel(repo, userId.value)
+                    NewConditionScreen(vm = newConditionListViewModel) {
+                        navController.navigate(Routes.Conditions.route){
+                            launchSingleTop = true
+                        }
+                    }
                 }
             }
         }
     }
-}
 
