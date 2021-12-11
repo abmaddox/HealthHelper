@@ -7,12 +7,14 @@ import androidx.compose.material.Icon
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewModelScope
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
@@ -40,7 +42,9 @@ import edu.towson.maddox.healthhelper.ui.screens.viewmodels.riskfactors.NewRiskF
 import edu.towson.maddox.healthhelper.ui.screens.viewmodels.riskfactors.RiskFactorsListViewModel
 import edu.towson.maddox.healthhelper.ui.screens.viewmodels.vitals.NewVitalSignViewModel
 import edu.towson.maddox.healthhelper.ui.screens.viewmodels.vitals.VitalSignListViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.launch
 
 @ExperimentalCoroutinesApi
 @ExperimentalFoundationApi
@@ -68,10 +72,20 @@ fun Root(db : DB) {
 
             val repo = HealthRepo(db.healthDAO())
 
+        //TODO move vm into navHost
             val loginViewModel = LoginViewModel(repo)
-            val signupViewModel = SignupViewModel(repo)
+
+        //TODO remove launched effect
+        LaunchedEffect(true)
+        {
+            loginViewModel.viewModelScope.launch(Dispatchers.IO) {
+                repo.insertDummyValues()
+            }
+        }
+
             val userId = rememberSaveable { mutableStateOf(0) }
             val navController = rememberNavController()
+
             NavHost(navController = navController, startDestination = Routes.Login.route) {
 
                 //Login page
@@ -92,6 +106,7 @@ fun Root(db : DB) {
                 //Signup page
                 composable(Routes.Signup.route)
                 {
+                    val signupViewModel = SignupViewModel(repo)
                     Signup(onSignupClick = { navController.navigate(Routes.Login.route){
                         launchSingleTop = true
                     } },
@@ -170,11 +185,9 @@ fun Root(db : DB) {
                 composable(Routes.Conditions.route)
                 {
                     val conditionListViewModel = ConditionListViewModel(repo, userId.value)
-                    ConditionList(vm = conditionListViewModel) {
-                        navController.navigate(Routes.AddCondition.route){
-                            launchSingleTop = true
-                        }
-                    }
+                    ConditionList(vm = conditionListViewModel, onClickFAB = {navController.navigate(Routes.AddCondition.route){
+                        launchSingleTop = true
+                    }})
                 }
 
                 //Add new condition page

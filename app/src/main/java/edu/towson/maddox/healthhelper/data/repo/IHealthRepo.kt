@@ -1,6 +1,5 @@
 package edu.towson.maddox.healthhelper.data.repo
 
-import androidx.room.Delete
 import edu.towson.maddox.healthhelper.data.model.User
 import edu.towson.maddox.healthhelper.data.model.conditions.Condition
 import edu.towson.maddox.healthhelper.data.model.conditions.uConditions
@@ -44,6 +43,9 @@ interface IHealthRepo {
         suspend fun getUserConditions(id : Int) : List<uConditions>?
 
         //SETTERS
+
+        //Sample Data
+        suspend fun insertDummyValues()
 
         //User
         suspend fun insertNewUser(u: User)

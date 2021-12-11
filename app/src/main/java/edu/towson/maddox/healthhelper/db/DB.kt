@@ -32,7 +32,7 @@ import edu.towson.maddox.healthhelper.data.model.vitals.uVitals
     uMedications::class,
     Condition::class,
     uConditions::class
-], version=4)
+], version=6)
 @TypeConverters(Converters::class)
 abstract class DB : RoomDatabase() {
     abstract fun healthDAO() : HealthDAO
