@@ -1,24 +1,30 @@
 package edu.towson.maddox.healthhelper.ui.screens.viewmodels.symptoms
 
+import android.app.Application
 import androidx.lifecycle.viewModelScope
 import edu.towson.maddox.healthhelper.data.model.symptoms.Symptom
 import edu.towson.maddox.healthhelper.data.model.symptoms.uSymptoms
-import edu.towson.maddox.healthhelper.data.repo.HealthRepo
 import edu.towson.maddox.healthhelper.ui.screens.viewmodels.generics.ItemListViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.launch
 
 @ExperimentalCoroutinesApi
-class SymptomsListViewModel(private val repo: HealthRepo, private val user_id: Int) : ItemListViewModel <uSymptoms, Symptom, Int?, Int?, Int?>() {
+class SymptomsListViewModel(app : Application) : ItemListViewModel <uSymptoms, Symptom, Int?, Int?, Int?>(app)
+{
+    init
+    {
+        viewModelScope.launch { setItems() }
+    }
+
     override suspend fun setUserItems(): List<uSymptoms>
     {
-        return repo.getUserSymptoms(user_id)
+        return repo.getUserSymptoms() ?: listOf()
     }
 
     override suspend fun setSubItems1(): List<Symptom>
     {
-        return repo.getSymptoms()
+        return repo.getSymptoms() ?: listOf()
     }
 
     override suspend fun setSubItems2(): List<Int?>

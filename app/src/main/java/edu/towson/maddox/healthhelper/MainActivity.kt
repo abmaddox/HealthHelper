@@ -7,24 +7,21 @@ import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
-import edu.towson.maddox.healthhelper.db.DB
 import edu.towson.maddox.healthhelper.nav.Root
 import edu.towson.maddox.healthhelper.ui.theme.HealthHelperTheme
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 
 class MainActivity : ComponentActivity() {
-    @ExperimentalCoroutinesApi
-    @ExperimentalFoundationApi
     @ExperimentalMaterialApi
+    @ExperimentalFoundationApi
+    @ExperimentalCoroutinesApi
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
             HealthHelperTheme {
                 // A surface container using the 'background' color from the theme
                 Surface(color = MaterialTheme.colors.background) {
-                    val db : DB = DB.getDatabase(this)
-                    Root(db = db)
-
+                    Root()
                 }
             }
         }

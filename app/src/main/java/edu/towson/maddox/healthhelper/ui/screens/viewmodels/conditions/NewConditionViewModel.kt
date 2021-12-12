@@ -1,14 +1,22 @@
 package edu.towson.maddox.healthhelper.ui.screens.viewmodels.conditions
 
+import android.app.Application
+import androidx.lifecycle.viewModelScope
 import edu.towson.maddox.healthhelper.data.model.conditions.Condition
 import edu.towson.maddox.healthhelper.data.model.conditions.uConditions
-import edu.towson.maddox.healthhelper.data.repo.HealthRepo
 import edu.towson.maddox.healthhelper.ui.screens.viewmodels.generics.NewItemViewModel
+import kotlinx.coroutines.launch
 
-class NewConditionViewModel(private val repo: HealthRepo, private val user_id: Int) : NewItemViewModel<Condition, Int?, Int?, Int?>()
+class NewConditionViewModel(app : Application) : NewItemViewModel<Condition, Int?, Int?, Int?>(app)
 {
-    override suspend fun setSubItems1(): List<Condition> {
-        return repo.getConditions()
+    init
+    {
+        viewModelScope.launch { setItems() }
+    }
+
+    override suspend fun setSubItems1(): List<Condition>
+    {
+        return repo.getConditions() ?: listOf()
     }
 
     override suspend fun setSubItems2(): List<Int?> {
@@ -24,6 +32,6 @@ class NewConditionViewModel(private val repo: HealthRepo, private val user_id: I
     }
 
     override suspend fun addUserItem() {
-        repo.insertUserConditions(uConditions(user_id = user_id, subItems1.value[selectedIndex1.value].condition_id,getStartDate(),getEndDate()))
+        repo.insertUserConditions(uConditions(user_id = repo.returnUserId(), subItems1.value[selectedIndex1.value].condition_id,getStartDate(),getEndDate()))
     }
 }

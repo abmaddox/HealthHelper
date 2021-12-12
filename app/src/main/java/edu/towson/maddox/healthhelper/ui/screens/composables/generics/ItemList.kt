@@ -9,6 +9,7 @@ import androidx.compose.material.FabPosition
 import androidx.compose.material.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import edu.towson.maddox.healthhelper.ui.components.Header
 import edu.towson.maddox.healthhelper.ui.screens.viewmodels.generics.IItemListViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 
@@ -16,6 +17,7 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 @ExperimentalCoroutinesApi
 @Composable
 fun <A,B,C,D,E>ItemList(
+    listType : String,
     vm: IItemListViewModel<A, B, C, D, E>,
     onDelete: (A) -> Unit,
     fab: @Composable () -> Unit = {}
@@ -25,6 +27,7 @@ fun <A,B,C,D,E>ItemList(
         floatingActionButtonPosition = FabPosition.End,
         isFloatingActionButtonDocked = true
     ) {
+        Header(text = listType)
         LazyColumn(modifier = Modifier
             .fillMaxWidth()
             .fillMaxHeight()) {

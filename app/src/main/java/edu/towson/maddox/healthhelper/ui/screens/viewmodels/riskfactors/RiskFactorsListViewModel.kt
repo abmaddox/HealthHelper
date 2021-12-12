@@ -1,25 +1,30 @@
 package edu.towson.maddox.healthhelper.ui.screens.viewmodels.riskfactors
 
+import android.app.Application
 import androidx.lifecycle.viewModelScope
 import edu.towson.maddox.healthhelper.data.model.riskFactors.RiskFactor
 import edu.towson.maddox.healthhelper.data.model.riskFactors.uRiskFactors
-import edu.towson.maddox.healthhelper.data.repo.HealthRepo
 import edu.towson.maddox.healthhelper.ui.screens.viewmodels.generics.ItemListViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.launch
 
 @ExperimentalCoroutinesApi
-class RiskFactorsListViewModel(private val repo: HealthRepo, private val userId : Int) : ItemListViewModel<uRiskFactors, RiskFactor, Int?, Int?, Int?>()
+class RiskFactorsListViewModel(app : Application) : ItemListViewModel<uRiskFactors, RiskFactor, Int?, Int?, Int?>(app)
 {
+    init
+    {
+        viewModelScope.launch { setItems() }
+    }
+
     override suspend fun setUserItems(): List<uRiskFactors>
     {
-        return repo.getUserRiskFactors(userId)
+        return repo.getUserRiskFactors() ?: listOf()
     }
 
     override suspend fun setSubItems1(): List<RiskFactor>
     {
-        return repo.getRiskFactors()
+        return repo.getRiskFactors() ?: listOf()
     }
 
     override suspend fun setSubItems2(): List<Int>

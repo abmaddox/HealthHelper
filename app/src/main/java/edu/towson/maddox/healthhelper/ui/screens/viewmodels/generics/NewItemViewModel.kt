@@ -1,12 +1,11 @@
 package edu.towson.maddox.healthhelper.ui.screens.viewmodels.generics
 
+import android.app.Application
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
+import androidx.lifecycle.AndroidViewModel
+import edu.towson.maddox.healthhelper.data.repo.HealthRepo
+import edu.towson.maddox.healthhelper.data.repo.IHealthRepo
 
 interface INewItemViewModel<A, B, C, D>{
 
@@ -62,16 +61,16 @@ interface INewItemViewModel<A, B, C, D>{
     suspend fun setItems()
     suspend fun addUserItem()
 
-    suspend fun setSubItems1(): List<A>
+    suspend fun setSubItems1(): List<A>?
     fun getSubItem1() : A
 
-    suspend fun setSubItems2():List<B>
+    suspend fun setSubItems2(): List<B>?
     fun getSubItem2() : B
 
-    suspend fun setSubItems3():List<C>
+    suspend fun setSubItems3(): List<C>?
     fun getSubItem3() : C
 
-    suspend fun setSubItems4():List<D>
+    suspend fun setSubItems4(): List<D>?
     fun getSubItem4() : D
 
     fun setStartDay(s : String)
@@ -116,8 +115,9 @@ interface INewItemViewModel<A, B, C, D>{
 
 }
 
-abstract class NewItemViewModel<A, B, C, D> : INewItemViewModel<A, B, C, D>, ViewModel()
+abstract class NewItemViewModel<A, B, C, D>(app : Application) : INewItemViewModel<A, B, C, D>, AndroidViewModel(app)
 {
+    val repo : IHealthRepo = HealthRepo(app)
     private val _subItems1: MutableState<List<A>> = mutableStateOf(listOf())
     private val _subItems2: MutableState<List<B>> = mutableStateOf(listOf())
     private val _subItems3: MutableState<List<C>> = mutableStateOf(listOf())
@@ -286,37 +286,17 @@ abstract class NewItemViewModel<A, B, C, D> : INewItemViewModel<A, B, C, D>, Vie
         return _subItems4.value[_selectedIndex4.value]
     }
 
-    init {
-
-        viewModelScope.launch(Dispatchers.Main)
-        {
-            setItems()
-        }
-    }
-
     override suspend fun setItems(){
-        _subItems1.value =
-            withContext(viewModelScope.coroutineContext + Dispatchers.IO) {
-                setSubItems1()
-            }
-        _subItems2.value =
-            withContext(viewModelScope.coroutineContext + Dispatchers.IO) {
-                setSubItems2()
-            }
-        _subItems3.value =
-            withContext(viewModelScope.coroutineContext + Dispatchers.IO) {
-                setSubItems3()
-            }
-        _subItems4.value =
-            withContext(viewModelScope.coroutineContext + Dispatchers.IO) {
-                setSubItems4()
-            }
+        setSubItems1()
+        setSubItems2()
+        setSubItems3()
+        setSubItems4()
     }
 
-    abstract override suspend fun setSubItems1(): List<A>
-    abstract override suspend fun setSubItems2():List<B>
-    abstract override suspend fun setSubItems3():List<C>
-    abstract override suspend fun setSubItems4():List<D>
+    abstract override suspend fun setSubItems1(): List<A>?
+    abstract override suspend fun setSubItems2():List<B>?
+    abstract override suspend fun setSubItems3():List<C>?
+    abstract override suspend fun setSubItems4():List<D>?
 
     abstract override suspend fun addUserItem()
 

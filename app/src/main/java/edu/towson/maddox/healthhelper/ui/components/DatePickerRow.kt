@@ -34,7 +34,7 @@ fun DatePickerRow(
             ComposeMenu(
                 menuItems = days,
                 menuExpandedState = isDayExpanded,
-                selectedIndex = selectedDay,
+                itemTypes = "days",
                 updateMenuExpandStatus = { toggleDays(null) },
                 onDismissMenuView = { toggleDays(false) },
                 onMenuItemClick = { setDay(days[it].toInt()) }
@@ -46,7 +46,7 @@ fun DatePickerRow(
             ComposeMenu(
                 menuItems = months,
                 menuExpandedState = isMonthExpanded,
-                selectedIndex = selectedMonth,
+                itemTypes = "months",
                 updateMenuExpandStatus = { toggleMonths(null) },
                 onDismissMenuView = { toggleMonths(false) },
                 onMenuItemClick ={ setMonth(months[it].toInt()) }
@@ -58,7 +58,7 @@ fun DatePickerRow(
             ComposeMenu(
                 menuItems = years,
                 menuExpandedState = isYearExpanded,
-                selectedIndex = selectedYear,
+                itemTypes = "years",
                 updateMenuExpandStatus = { toggleYears(null) },
                 onDismissMenuView = { toggleYears(false) },
                 onMenuItemClick ={ setYear(years[it].toInt()) }

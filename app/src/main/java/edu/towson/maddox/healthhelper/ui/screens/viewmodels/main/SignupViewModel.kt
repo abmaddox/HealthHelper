@@ -1,16 +1,19 @@
 package edu.towson.maddox.healthhelper.ui.screens.viewmodels.main
 
+import android.app.Application
 import androidx.compose.runtime.mutableStateOf
-import androidx.lifecycle.ViewModel
+import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import edu.towson.maddox.healthhelper.data.model.User
 import edu.towson.maddox.healthhelper.data.repo.HealthRepo
+import edu.towson.maddox.healthhelper.data.repo.IHealthRepo
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-class SignupViewModel(private val repo: HealthRepo) : ViewModel(){
+class SignupViewModel(app : Application) : AndroidViewModel(app){
 
+    val repo : IHealthRepo = HealthRepo(app)
     private val _username = mutableStateOf("")
     val username = _username
 

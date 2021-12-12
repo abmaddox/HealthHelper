@@ -1,34 +1,41 @@
 package edu.towson.maddox.healthhelper.ui.screens.viewmodels.medications
 
+import android.app.Application
 import androidx.lifecycle.viewModelScope
 import edu.towson.maddox.healthhelper.data.model.medications.*
-import edu.towson.maddox.healthhelper.data.repo.HealthRepo
 import edu.towson.maddox.healthhelper.ui.screens.viewmodels.generics.ItemListViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.launch
 
 @ExperimentalCoroutinesApi
-class MedListViewModel(private val repo: HealthRepo, private val user_id : Int) : ItemListViewModel<uMedications, Medication, Frequency, AdministrationMethod, DoseUnit>()
+class MedListViewModel(app : Application) : ItemListViewModel<uMedications, Medication, Frequency, AdministrationMethod, DoseUnit>(app)
 {
-    override suspend fun setUserItems(): List<uMedications> {
-        return repo.getUserMeds(user_id)
+    init
+    {
+        viewModelScope.launch { setItems() }
     }
 
-    override suspend fun setSubItems1(): List<Medication> {
-        return repo.getMedication()
+    override suspend fun setUserItems(): List<uMedications>
+    {
+        return repo.getUserMeds() ?: listOf()
+    }
+
+    override suspend fun setSubItems1(): List<Medication>
+    {
+        return repo.getMedication() ?: listOf()
     }
 
     override suspend fun setSubItems2(): List<Frequency> {
-        return repo.getFrequencies()
+        return repo.getFrequencies() ?: listOf()
     }
 
     override suspend fun setSubItems3(): List<AdministrationMethod> {
-        return repo.getAdminMethods()
+        return repo.getAdminMethods() ?: listOf()
     }
 
     override suspend fun setSubItems4(): List<DoseUnit> {
-        return repo.getDoseUnits()
+        return repo.getDoseUnits() ?: listOf()
     }
 
     override fun getSubItem1(subitem_id: Int): Medication {

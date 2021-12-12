@@ -17,18 +17,19 @@ interface IHealthRepo {
 
         //User
         suspend fun getUserId(username : String, password : String) : Int?
+        fun returnUserId(): Int
 
         //Vital sign
-        suspend fun getUserVitals(id : Int) : List<uVitals>?
+        suspend fun getUserVitals() : List<uVitals>?
         suspend fun getRecordingMethods() : List<RecordingMethod>?
         suspend fun getVitalSigns() : List<VitalSign>?
 
         //Symptoms
         suspend fun getSymptoms() : List<Symptom>?
-        suspend fun getUserSymptoms(id : Int) : List<uSymptoms>?
+        suspend fun getUserSymptoms() : List<uSymptoms>?
 
         //Medications
-        suspend fun getUserMeds(id : Int) : List<uMedications>?
+        suspend fun getUserMeds() : List<uMedications>?
         suspend fun getDoseUnits() : List<DoseUnit>?
         suspend fun getFrequencies() : List<Frequency>?
         suspend fun getMedication() : List<Medication>?
@@ -36,11 +37,11 @@ interface IHealthRepo {
 
         //Risk factors
         suspend fun getRiskFactors() : List<RiskFactor>?
-        suspend fun getUserRiskFactors( id: Int ) : List<uRiskFactors>?
+        suspend fun getUserRiskFactors() : List<uRiskFactors>?
 
         //Conditions
         suspend fun getConditions() : List<Condition>?
-        suspend fun getUserConditions(id : Int) : List<uConditions>?
+        suspend fun getUserConditions() : List<uConditions>?
 
         //SETTERS
 

@@ -1,5 +1,8 @@
 package edu.towson.maddox.healthhelper.data.repo
 
+import android.app.Application
+import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.mutableStateOf
 import edu.towson.maddox.healthhelper.data.model.User
 import edu.towson.maddox.healthhelper.data.model.conditions.Condition
 import edu.towson.maddox.healthhelper.data.model.conditions.uConditions
@@ -11,16 +14,26 @@ import edu.towson.maddox.healthhelper.data.model.symptoms.uSymptoms
 import edu.towson.maddox.healthhelper.data.model.vitals.RecordingMethod
 import edu.towson.maddox.healthhelper.data.model.vitals.VitalSign
 import edu.towson.maddox.healthhelper.data.model.vitals.uVitals
+import edu.towson.maddox.healthhelper.db.DB
 import edu.towson.maddox.healthhelper.db.HealthDAO
 
-class HealthRepo(private val dao: HealthDAO) : IHealthRepo {
+class HealthRepo(app : Application) : IHealthRepo {
 
-    override suspend fun getUserId(username : String, password : String): Int? {
-        return dao.getUserId(username, password)
+    private val dao : HealthDAO = DB.getDatabase(app).healthDAO()
+    private val userId : MutableState<Int?> = mutableStateOf(null)
+
+    override fun returnUserId() : Int
+    {
+        return userId.value!!
     }
 
-    override suspend fun getUserVitals(id: Int): List<uVitals> {
-        return dao.getUserVitals(id)
+    override suspend fun getUserId(username : String, password : String): Int? {
+        userId.value = dao.getUserId(username, password)
+        return userId.value
+    }
+
+    override suspend fun getUserVitals(): List<uVitals> {
+        return dao.getUserVitals(userId.value)
     }
 
     override suspend fun getRecordingMethods(): List<RecordingMethod> {
@@ -35,12 +48,12 @@ class HealthRepo(private val dao: HealthDAO) : IHealthRepo {
         return dao.getSymptoms()
     }
 
-    override suspend fun getUserSymptoms(id: Int): List<uSymptoms> {
-        return dao.getUserSymptoms(id)
+    override suspend fun getUserSymptoms(): List<uSymptoms> {
+        return dao.getUserSymptoms(userId.value)
     }
 
-    override suspend fun getUserMeds(id: Int): List<uMedications> {
-        return dao.getUserMeds(id)
+    override suspend fun getUserMeds(): List<uMedications> {
+        return dao.getUserMeds(userId.value)
     }
 
     override suspend fun getDoseUnits(): List<DoseUnit> {
@@ -63,16 +76,16 @@ class HealthRepo(private val dao: HealthDAO) : IHealthRepo {
         return dao.getRiskFactors()
     }
 
-    override suspend fun getUserRiskFactors(id: Int): List<uRiskFactors> {
-        return dao.getUserRiskFactors(id)
+    override suspend fun getUserRiskFactors(): List<uRiskFactors> {
+        return dao.getUserRiskFactors(userId.value)
     }
 
     override suspend fun getConditions(): List<Condition> {
         return dao.getConditions()
     }
 
-    override suspend fun getUserConditions(id: Int): List<uConditions> {
-        return dao.getUserConditions(id)
+    override suspend fun getUserConditions(): List<uConditions> {
+        return dao.getUserConditions(userId.value)
     }
 
     override suspend fun insertDummyValues()

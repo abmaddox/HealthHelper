@@ -1,31 +1,35 @@
 package edu.towson.maddox.healthhelper.ui.screens.viewmodels.vitals
 
+import android.app.Application
 import androidx.lifecycle.viewModelScope
 import edu.towson.maddox.healthhelper.data.model.vitals.RecordingMethod
 import edu.towson.maddox.healthhelper.data.model.vitals.VitalSign
 import edu.towson.maddox.healthhelper.data.model.vitals.uVitals
-import edu.towson.maddox.healthhelper.data.repo.HealthRepo
 import edu.towson.maddox.healthhelper.ui.screens.viewmodels.generics.ItemListViewModel
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.launch
 
 @ExperimentalCoroutinesApi
-class VitalSignListViewModel(private val repo: HealthRepo, private val userId : Int) : ItemListViewModel<uVitals, VitalSign, RecordingMethod, Int?, Int?>()
+class VitalSignListViewModel(app : Application) : ItemListViewModel<uVitals, VitalSign, RecordingMethod, Int?, Int?>(app)
 {
+    init
+    {
+        viewModelScope.launch { setItems() }
+    }
+
     override suspend fun setUserItems(): List<uVitals>
     {
-        return repo.getUserVitals(userId)
+        return repo.getUserVitals() ?: listOf()
     }
 
     override suspend fun setSubItems1(): List<VitalSign>
     {
-        return repo.getVitalSigns()
+        return repo.getVitalSigns() ?: listOf()
     }
 
     override suspend fun setSubItems2(): List<RecordingMethod>
     {
-        return repo.getRecordingMethods()
+        return repo.getRecordingMethods() ?: listOf()
     }
 
     override suspend fun setSubItems3(): List<Int?>
@@ -60,7 +64,7 @@ class VitalSignListViewModel(private val repo: HealthRepo, private val userId : 
 
     override fun deleteUserItem(item: uVitals)
     {
-        viewModelScope.launch(Dispatchers.IO){
+        viewModelScope.launch{
             repo.deleteUserVital(item)
             reloadUserItems()
         }

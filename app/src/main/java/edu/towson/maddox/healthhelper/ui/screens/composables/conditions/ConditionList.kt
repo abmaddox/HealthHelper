@@ -3,6 +3,7 @@ package edu.towson.maddox.healthhelper.ui.screens.composables.conditions
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.runtime.Composable
 import edu.towson.maddox.healthhelper.ui.components.FAB
+import edu.towson.maddox.healthhelper.ui.components.ItemTypes
 import edu.towson.maddox.healthhelper.ui.screens.composables.generics.ItemList
 import edu.towson.maddox.healthhelper.ui.screens.viewmodels.conditions.ConditionListViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -13,7 +14,7 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 fun ConditionList(vm : ConditionListViewModel,
                   onClickFAB : () -> Unit)
 {
-    ItemList(vm = vm, onDelete = { vm.deleteUserItem(it) }){
+    ItemList(vm = vm, onDelete = { vm.deleteUserItem(it) }, listType = ItemTypes.uc.toString()){
         FAB(onClick = onClickFAB)
     }
 }

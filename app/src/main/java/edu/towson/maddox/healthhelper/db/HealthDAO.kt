@@ -19,134 +19,134 @@ interface HealthDAO {
 
         //User
         @Query("SELECT user_id from user WHERE username=:username AND password=:password")
-        fun getUserId(username : String, password : String) : Int?
+        suspend fun getUserId(username : String, password : String) : Int?
 
         //Vital sign
         @Query("SELECT * from uVitals WHERE user_id=:id")
-        fun getUserVitals(id : Int) : List<uVitals>
+        suspend fun getUserVitals(id: Int?) : List<uVitals>
 
         @Query("SELECT * FROM recordingMethod")
-        fun getRecordingMethods(): List<RecordingMethod>
+        suspend fun getRecordingMethods(): List<RecordingMethod>
         @Query("SELECT * FROM vitalSign")
-        fun getVitalSigns() : List<VitalSign>
+        suspend fun getVitalSigns() : List<VitalSign>
 
         //Symptoms
         @Query("SELECT * FROM symptom")
-        fun getSymptoms() : List<Symptom>
+        suspend fun getSymptoms() : List<Symptom>
         @Query("SELECT * from uSymptoms WHERE user_id=:id")
-        fun getUserSymptoms(id : Int) : List<uSymptoms>
+        suspend fun getUserSymptoms(id: Int?) : List<uSymptoms>
 
         //Medications
         @Query("SELECT * from uMedications WHERE user_id=:id")
-        fun getUserMeds(id : Int) : List<uMedications>
+        suspend fun getUserMeds(id: Int?) : List<uMedications>
         @Query("SELECT * FROM doseUnit")
-        fun getDoseUnits() : List<DoseUnit>
+        suspend fun getDoseUnits() : List<DoseUnit>
         @Query("SELECT * FROM frequency")
-        fun getFrequencies() : List<Frequency>
+        suspend fun getFrequencies() : List<Frequency>
         @Query("SELECT * FROM medication")
-        fun getMedication() : List<Medication>
+        suspend fun getMedication() : List<Medication>
         @Query("SELECT * FROM administrationMethod")
-        fun getAdminMethods() : List<AdministrationMethod>
+        suspend fun getAdminMethods() : List<AdministrationMethod>
 
         //Risk factors
         @Query("SELECT * FROM riskFactor")
-        fun getRiskFactors() : List<RiskFactor>
+        suspend fun getRiskFactors() : List<RiskFactor>
         @Query("SELECT * from uRiskFactors WHERE user_id=:id")
-        fun getUserRiskFactors( id: Int ) : List<uRiskFactors>
+        suspend fun getUserRiskFactors(id: Int?) : List<uRiskFactors>
 
         //Conditions
         @Query("SELECT * FROM condition")
-        fun getConditions() : List<Condition>
+        suspend fun getConditions() : List<Condition>
         @Query("SELECT * from uConditions WHERE user_id=:id")
-        fun getUserConditions(id : Int) : List<uConditions>
+        suspend fun getUserConditions(id: Int?) : List<uConditions>
 
     //SETTERS
 
         //User
         @Insert
-        fun insertNewUser(u: User)
+        suspend fun insertNewUser(u: User)
 
         //Vital sign
         @Insert
-        fun insertUserVital(uv : uVitals)
+        suspend fun insertUserVital(uv : uVitals)
         @Insert
-        fun insertRecordingMethod(rm : RecordingMethod)
+        suspend fun insertRecordingMethod(rm : RecordingMethod)
         @Insert
-        fun insertVitalSigns(vs : VitalSign)
+        suspend fun insertVitalSigns(vs : VitalSign)
 
         //Symptoms
         @Insert
-        fun insertSymptom(s : Symptom)
+        suspend fun insertSymptom(s : Symptom)
         @Insert
-        fun insertUserSymptoms(us : uSymptoms)
+        suspend fun insertUserSymptoms(us : uSymptoms)
 
         //Medications
         @Insert
-        fun insertUserMeds(um : uMedications)
+        suspend fun insertUserMeds(um : uMedications)
         @Insert
-        fun insertDoseUnits(du : DoseUnit)
+        suspend fun insertDoseUnits(du : DoseUnit)
         @Insert
-        fun insertFrequencies(f : Frequency)
+        suspend fun insertFrequencies(f : Frequency)
         @Insert
-        fun insertMedication(m : Medication)
+        suspend fun insertMedication(m : Medication)
         @Insert
-        fun insertAdminMethods(am : AdministrationMethod)
+        suspend fun insertAdminMethods(am : AdministrationMethod)
 
         //Risk factors
         @Insert
-        fun insertRiskFactors(rf : RiskFactor)
+        suspend fun insertRiskFactors(rf : RiskFactor)
         @Insert
-        fun insertUserRiskFactors(uv: uRiskFactors)
+        suspend fun insertUserRiskFactors(uv: uRiskFactors)
 
         //Conditions
         @Insert
-        fun insertConditions(c : Condition)
+        suspend fun insertConditions(c : Condition)
         @Insert
-        fun insertUserConditions(uc : uConditions)
+        suspend fun insertUserConditions(uc : uConditions)
 
     //UPDATERS
 
         //User
         @Update
-        fun updateUser(u: User)
+        suspend fun updateUser(u: User)
 
         //Vital sign
         @Update
-        fun updateUserVital(uv : uVitals)
+        suspend fun updateUserVital(uv : uVitals)
         @Update
-        fun updateRecordingMethod(rm : RecordingMethod)
+        suspend fun updateRecordingMethod(rm : RecordingMethod)
         @Update
-        fun updateVitalSigns(vs : VitalSign)
+        suspend fun updateVitalSigns(vs : VitalSign)
 
         //Symptoms
         @Update
-        fun updateSymptom(s : Symptom)
+        suspend fun updateSymptom(s : Symptom)
         @Update
-        fun updateUserSymptoms(us : uSymptoms)
+        suspend fun updateUserSymptoms(us : uSymptoms)
 
         //Medications
         @Update
-        fun updateUserMeds(um : uMedications)
+        suspend fun updateUserMeds(um : uMedications)
         @Update
-        fun updateDoseUnits(du : DoseUnit)
+        suspend fun updateDoseUnits(du : DoseUnit)
         @Update
-        fun updateFrequencies(f : Frequency)
+        suspend fun updateFrequencies(f : Frequency)
         @Update
-        fun updateMedication(m : Medication)
+        suspend fun updateMedication(m : Medication)
         @Update
-        fun updateAdminMethods(am : AdministrationMethod)
+        suspend fun updateAdminMethods(am : AdministrationMethod)
 
         //Risk factors
         @Update
-        fun updateRiskFactors(rf : RiskFactor)
+        suspend fun updateRiskFactors(rf : RiskFactor)
         @Update
-        fun updateUserRiskFactors(urf: uRiskFactors)
+        suspend fun updateUserRiskFactors(urf: uRiskFactors)
 
         //Conditions
         @Update
-        fun updateConditions(c : Condition)
+        suspend fun updateConditions(c : Condition)
         @Update
-        fun updateUserConditions(uc : uConditions)
+        suspend fun updateUserConditions(uc : uConditions)
 
 
 //DELETES
@@ -157,21 +157,21 @@ interface HealthDAO {
 
         //Vital sign
         @Delete
-        fun deleteUserVital(uv : uVitals)
+        suspend fun deleteUserVital(uv : uVitals)
 
         //Symptoms
         @Delete
-        fun deleteUserSymptoms(us : uSymptoms)
+        suspend fun deleteUserSymptoms(us : uSymptoms)
 
         //Medications
         @Delete
-        fun deleteUserMeds(um : uMedications)
+        suspend fun deleteUserMeds(um : uMedications)
 
         //Risk factors
         @Delete
-        fun deleteUserRiskFactors(urf: uRiskFactors)
+        suspend fun deleteUserRiskFactors(urf: uRiskFactors)
 
         //Conditions
         @Delete
-        fun deleteUserConditions(uc : uConditions)
+        suspend fun deleteUserConditions(uc : uConditions)
 }

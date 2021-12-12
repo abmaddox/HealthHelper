@@ -2,7 +2,6 @@ package edu.towson.maddox.healthhelper.data.model
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import org.jetbrains.annotations.NotNull
 import java.util.*
 
 @Entity(tableName = "user")

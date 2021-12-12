@@ -34,7 +34,7 @@ import edu.towson.maddox.healthhelper.data.model.vitals.uVitals
     uMedications::class,
     Condition::class,
     uConditions::class
-], version=6)
+], version=7)
 @TypeConverters(Converters::class)
 abstract class DB : RoomDatabase() {
     abstract fun healthDAO() : HealthDAO
@@ -45,6 +45,7 @@ abstract class DB : RoomDatabase() {
                 synchronized(this) {
                     INSTANCE =
                         Room.databaseBuilder(context, DB::class.java, "HealthDB")
+                            .fallbackToDestructiveMigration()
                             .createFromAsset("databases/HealthDB.db")
                             .build()
                 }

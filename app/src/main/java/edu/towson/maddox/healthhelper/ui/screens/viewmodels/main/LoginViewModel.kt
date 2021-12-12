@@ -1,15 +1,19 @@
 package edu.towson.maddox.healthhelper.ui.screens.viewmodels.main
 
+import android.app.Application
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
-import androidx.lifecycle.ViewModel
+import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import edu.towson.maddox.healthhelper.data.repo.HealthRepo
+import edu.towson.maddox.healthhelper.data.repo.IHealthRepo
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-class LoginViewModel(private val repo : HealthRepo) : ViewModel(){
+class LoginViewModel(app : Application) : AndroidViewModel(app){
+
+    val repo : IHealthRepo = HealthRepo(app)
 
     private val _validating : MutableState<Boolean> = mutableStateOf(false)
     val validating = _validating
