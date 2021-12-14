@@ -1,41 +1,40 @@
 package edu.towson.maddox.healthhelper.ui.screens.viewmodels.medications
 
-import android.app.Application
 import androidx.lifecycle.viewModelScope
 import edu.towson.maddox.healthhelper.data.model.medications.*
+import edu.towson.maddox.healthhelper.data.repo.HealthRepo
 import edu.towson.maddox.healthhelper.ui.screens.viewmodels.generics.ItemListViewModel
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.launch
 
 @ExperimentalCoroutinesApi
-class MedListViewModel(app : Application) : ItemListViewModel<uMedications, Medication, Frequency, AdministrationMethod, DoseUnit>(app)
+class MedListViewModel(private val repo : HealthRepo) : ItemListViewModel<uMedications, Medication, Frequency, AdministrationMethod, DoseUnit>(repo)
 {
     init
     {
         viewModelScope.launch { setItems() }
     }
 
-    override suspend fun setUserItems(): List<uMedications>
+    override fun setUserItems(): List<uMedications>
     {
-        return repo.getUserMeds() ?: listOf()
+        return repo.getUserMeds()
     }
 
-    override suspend fun setSubItems1(): List<Medication>
+    override fun setSubItems1(): List<Medication>
     {
-        return repo.getMedication() ?: listOf()
+        return repo.getMedication()
     }
 
-    override suspend fun setSubItems2(): List<Frequency> {
-        return repo.getFrequencies() ?: listOf()
+    override fun setSubItems2(): List<Frequency> {
+        return repo.getFrequencies()
     }
 
-    override suspend fun setSubItems3(): List<AdministrationMethod> {
-        return repo.getAdminMethods() ?: listOf()
+    override fun setSubItems3(): List<AdministrationMethod> {
+        return repo.getAdminMethods()
     }
 
-    override suspend fun setSubItems4(): List<DoseUnit> {
-        return repo.getDoseUnits() ?: listOf()
+    override fun setSubItems4(): List<DoseUnit> {
+        return repo.getDoseUnits()
     }
 
     override fun getSubItem1(subitem_id: Int): Medication {
@@ -54,12 +53,9 @@ class MedListViewModel(app : Application) : ItemListViewModel<uMedications, Medi
         return subItems4.value.filter { it.unit_id == subitem_id }[0]
     }
 
-    override fun deleteUserItem(item: uMedications)
+    override suspend fun deleteUserItemFromDb(item: uMedications)
     {
-        viewModelScope.launch(Dispatchers.IO){
-            repo.deleteUserMeds(item)
-            reloadUserItems()
-        }
+        repo.deleteUserMeds(item)
     }
 
 }

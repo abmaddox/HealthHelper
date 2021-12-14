@@ -23,7 +23,7 @@ interface HealthDAO {
 
         //Vital sign
         @Query("SELECT * from uVitals WHERE user_id=:id")
-        suspend fun getUserVitals(id: Int?) : List<uVitals>
+        suspend fun getUserVitals(id: Int) : List<uVitals>
 
         @Query("SELECT * FROM recordingMethod")
         suspend fun getRecordingMethods(): List<RecordingMethod>
@@ -34,11 +34,11 @@ interface HealthDAO {
         @Query("SELECT * FROM symptom")
         suspend fun getSymptoms() : List<Symptom>
         @Query("SELECT * from uSymptoms WHERE user_id=:id")
-        suspend fun getUserSymptoms(id: Int?) : List<uSymptoms>
+        suspend fun getUserSymptoms(id: Int) : List<uSymptoms>
 
         //Medications
         @Query("SELECT * from uMedications WHERE user_id=:id")
-        suspend fun getUserMeds(id: Int?) : List<uMedications>
+        suspend fun getUserMeds(id: Int) : List<uMedications>
         @Query("SELECT * FROM doseUnit")
         suspend fun getDoseUnits() : List<DoseUnit>
         @Query("SELECT * FROM frequency")
@@ -52,13 +52,13 @@ interface HealthDAO {
         @Query("SELECT * FROM riskFactor")
         suspend fun getRiskFactors() : List<RiskFactor>
         @Query("SELECT * from uRiskFactors WHERE user_id=:id")
-        suspend fun getUserRiskFactors(id: Int?) : List<uRiskFactors>
+        suspend fun getUserRiskFactors(id: Int) : List<uRiskFactors>
 
         //Conditions
         @Query("SELECT * FROM condition")
         suspend fun getConditions() : List<Condition>
         @Query("SELECT * from uConditions WHERE user_id=:id")
-        suspend fun getUserConditions(id: Int?) : List<uConditions>
+        suspend fun getUserConditions(id: Int) : List<uConditions>
 
     //SETTERS
 

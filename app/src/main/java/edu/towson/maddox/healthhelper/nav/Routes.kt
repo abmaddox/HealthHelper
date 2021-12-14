@@ -1,6 +1,7 @@
 package edu.towson.maddox.healthhelper.nav
 
 sealed class Routes (val route: String){
+    object Loading : Routes("Loading")
     object Vitals: Routes("Vital Signs")
     object AddVital: Routes("New Vital Sign")
     object RiskFactors: Routes("Risk Factors")

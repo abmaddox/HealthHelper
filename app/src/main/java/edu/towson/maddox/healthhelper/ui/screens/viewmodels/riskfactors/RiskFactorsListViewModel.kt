@@ -1,43 +1,42 @@
 package edu.towson.maddox.healthhelper.ui.screens.viewmodels.riskfactors
 
-import android.app.Application
 import androidx.lifecycle.viewModelScope
 import edu.towson.maddox.healthhelper.data.model.riskFactors.RiskFactor
 import edu.towson.maddox.healthhelper.data.model.riskFactors.uRiskFactors
+import edu.towson.maddox.healthhelper.data.repo.HealthRepo
 import edu.towson.maddox.healthhelper.ui.screens.viewmodels.generics.ItemListViewModel
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.launch
 
 @ExperimentalCoroutinesApi
-class RiskFactorsListViewModel(app : Application) : ItemListViewModel<uRiskFactors, RiskFactor, Int?, Int?, Int?>(app)
+class RiskFactorsListViewModel(private val repo : HealthRepo) : ItemListViewModel<uRiskFactors, RiskFactor, Int?, Int?, Int?>(repo)
 {
     init
     {
         viewModelScope.launch { setItems() }
     }
 
-    override suspend fun setUserItems(): List<uRiskFactors>
+    override fun setUserItems(): List<uRiskFactors>
     {
         return repo.getUserRiskFactors() ?: listOf()
     }
 
-    override suspend fun setSubItems1(): List<RiskFactor>
+    override fun setSubItems1(): List<RiskFactor>
     {
         return repo.getRiskFactors() ?: listOf()
     }
 
-    override suspend fun setSubItems2(): List<Int>
+    override fun setSubItems2(): List<Int>
     {
         return listOf()
     }
 
-    override suspend fun setSubItems3(): List<Int?>
+    override fun setSubItems3(): List<Int?>
     {
         return listOf()
     }
 
-    override suspend fun setSubItems4(): List<Int?>
+    override fun setSubItems4(): List<Int?>
     {
         return listOf()
     }
@@ -62,12 +61,8 @@ class RiskFactorsListViewModel(app : Application) : ItemListViewModel<uRiskFacto
         return null
     }
 
-    override fun deleteUserItem(item: uRiskFactors)
+    override suspend fun deleteUserItemFromDb(item: uRiskFactors)
     {
-        viewModelScope.launch(Dispatchers.IO) {
-            repo.deleteUserRiskFactors(item)
-            reloadUserItems()
-        }
-
+        repo.deleteUserRiskFactors(item)
     }
 }

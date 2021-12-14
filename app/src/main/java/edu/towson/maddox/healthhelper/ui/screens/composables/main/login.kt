@@ -21,9 +21,9 @@ fun Login(vm: LoginViewModel,
 
     vm.setUsername("")
     vm.setPassword("")
-    if (vm.navigate.value && vm.user_id.value!= null){
+    if (vm.navigate.value && vm.userId.value!= null){
         vm.toggleNavigate()
-        onLoginClick(vm.user_id.value!!)
+        onLoginClick(vm.userId.value!!)
     }
     Column(
         modifier = Modifier

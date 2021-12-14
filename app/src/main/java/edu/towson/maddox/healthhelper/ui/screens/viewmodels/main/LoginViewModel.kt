@@ -1,19 +1,15 @@
 package edu.towson.maddox.healthhelper.ui.screens.viewmodels.main
 
-import android.app.Application
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
-import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import edu.towson.maddox.healthhelper.data.repo.HealthRepo
-import edu.towson.maddox.healthhelper.data.repo.IHealthRepo
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-class LoginViewModel(app : Application) : AndroidViewModel(app){
-
-    val repo : IHealthRepo = HealthRepo(app)
+class LoginViewModel(private val repo : HealthRepo) : ViewModel(){
 
     private val _validating : MutableState<Boolean> = mutableStateOf(false)
     val validating = _validating
@@ -24,8 +20,8 @@ class LoginViewModel(app : Application) : AndroidViewModel(app){
     private val _password = mutableStateOf("")
     val password = _password
 
-    private val _user_id : MutableState<Int?> = mutableStateOf(null)
-    val user_id = _user_id
+    private val _userId : MutableState<Int?> = mutableStateOf(null)
+    val userId = _userId
 
     private val _navigate = mutableStateOf(false)
     val navigate = _navigate
@@ -54,7 +50,7 @@ class LoginViewModel(app : Application) : AndroidViewModel(app){
 
         viewModelScope.launch(Dispatchers.Main){
             fetchUserId()
-            if (_user_id.value != null) {
+            if (_userId.value != null) {
                     _validating.value = false
                     _showValidationText.value = false
                     _navigate.value = true
@@ -66,7 +62,7 @@ class LoginViewModel(app : Application) : AndroidViewModel(app){
     }
 
     private suspend fun fetchUserId(){
-        _user_id.value =
+        _userId.value =
             withContext(viewModelScope.coroutineContext + Dispatchers.IO)
             {
                 repo.getUserId(

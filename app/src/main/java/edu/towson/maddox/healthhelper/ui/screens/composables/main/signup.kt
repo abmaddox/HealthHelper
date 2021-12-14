@@ -51,6 +51,13 @@ fun Signup(vm: SignupViewModel,
             )
             Spacer(modifier = Modifier.padding(bottom = 10.dp))
         }
+        if(vm.showEmptyFieldValidationText.value) {
+            Text(
+                text = "ERROR: Neither username or password may be blank.",
+                color = Color.Red
+            )
+            Spacer(modifier = Modifier.padding(bottom = 10.dp))
+        }
         UsernameTextField(vm)
         PasswordTextField(vm)
         PasswordTextField(vm, isConfirmField = true)

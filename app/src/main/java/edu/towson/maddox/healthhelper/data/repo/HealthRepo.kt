@@ -1,8 +1,5 @@
 package edu.towson.maddox.healthhelper.data.repo
 
-import android.app.Application
-import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.mutableStateOf
 import edu.towson.maddox.healthhelper.data.model.User
 import edu.towson.maddox.healthhelper.data.model.conditions.Condition
 import edu.towson.maddox.healthhelper.data.model.conditions.uConditions
@@ -14,78 +11,201 @@ import edu.towson.maddox.healthhelper.data.model.symptoms.uSymptoms
 import edu.towson.maddox.healthhelper.data.model.vitals.RecordingMethod
 import edu.towson.maddox.healthhelper.data.model.vitals.VitalSign
 import edu.towson.maddox.healthhelper.data.model.vitals.uVitals
-import edu.towson.maddox.healthhelper.db.DB
 import edu.towson.maddox.healthhelper.db.HealthDAO
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.launch
 
-class HealthRepo(app : Application) : IHealthRepo {
 
-    private val dao : HealthDAO = DB.getDatabase(app).healthDAO()
-    private val userId : MutableState<Int?> = mutableStateOf(null)
+class HealthRepo (private val dao : HealthDAO, private val scope: CoroutineScope) : IHealthRepo {
+
+    private var userId : Int? = null
+
+    private var conditions : List<Condition> = listOf()
+    private var adminMethods : List<AdministrationMethod> = listOf()
+    private var doseUnits : List<DoseUnit> = listOf()
+    private var frequencies : List<Frequency> = listOf()
+    private var medications : List<Medication> = listOf()
+    private var riskFactors : List<RiskFactor> = listOf()
+    private var symptoms : List<Symptom> = listOf()
+    private var recordingMethods : List<RecordingMethod> = listOf()
+    private var vitalSigns : List<VitalSign> = listOf()
+
+    private var userConditions : List<uConditions> = listOf()
+    private var userMedications : List<uMedications> = listOf()
+    private var userRiskFactors : List<uRiskFactors> = listOf()
+    private var userSymptoms : List<uSymptoms> = listOf()
+    private var userVitalSigns : List<uVitals> = listOf()
+    private var waiting : Boolean = true
+    init
+    {
+        scope.launch {
+            loadDefaults()
+        }
+    }
+
+    override suspend fun loadDefaults()
+    {
+        setAdminMethods()
+        setConditions()
+        setDoseUnits()
+        setFrequencies()
+        setMedication()
+        setRecordingMethods()
+        setRiskFactors()
+        setSymptoms()
+        setVitalSigns()
+    }
+
+    override fun loadUserItems()
+    {
+        scope.launch{
+            setUserConditions()
+            setUserMeds()
+            setUserRiskFactors()
+            setUserSymptoms()
+            setUserVitals()
+        }
+    }
 
     override fun returnUserId() : Int
     {
-        return userId.value!!
+        return userId!!
+    }
+
+    override fun getUserVitals(): List<uVitals>
+    {
+        return userVitalSigns
+    }
+
+    override fun getRecordingMethods(): List<RecordingMethod>
+    {
+        return recordingMethods
+    }
+
+    override fun getVitalSigns(): List<VitalSign>
+    {
+        return vitalSigns
+    }
+
+    override fun getSymptoms(): List<Symptom>
+    {
+        return symptoms
+    }
+
+    override fun getUserSymptoms(): List<uSymptoms>
+    {
+        return userSymptoms
+    }
+
+    override fun getUserMeds(): List<uMedications>
+    {
+        return userMedications
+    }
+
+    override fun getDoseUnits(): List<DoseUnit>
+    {
+        return doseUnits
+    }
+
+    override fun getFrequencies(): List<Frequency>
+    {
+        return frequencies
+    }
+
+    override fun getMedication(): List<Medication>
+    {
+        return medications
+    }
+
+    override fun getAdminMethods(): List<AdministrationMethod>
+    {
+        return adminMethods
+    }
+
+    override fun getRiskFactors(): List<RiskFactor>
+    {
+        return riskFactors
+    }
+
+    override fun getUserRiskFactors(): List<uRiskFactors>
+    {
+        return userRiskFactors
+    }
+
+    override fun getConditions(): List<Condition>
+    {
+        return conditions
+    }
+
+    override fun getUserConditions(): List<uConditions>
+    {
+        return userConditions
+    }
+
+    override fun setUserId(i : Int)
+    {
+        userId = i
     }
 
     override suspend fun getUserId(username : String, password : String): Int? {
-        userId.value = dao.getUserId(username, password)
-        return userId.value
+        userId = dao.getUserId(username, password)
+        return userId
     }
 
-    override suspend fun getUserVitals(): List<uVitals> {
-        return dao.getUserVitals(userId.value)
+    override suspend fun setUserVitals(){
+        userVitalSigns =  dao.getUserVitals(userId!!)
     }
 
-    override suspend fun getRecordingMethods(): List<RecordingMethod> {
-        return dao.getRecordingMethods()
+    override suspend fun setRecordingMethods() {
+        recordingMethods = dao.getRecordingMethods()
     }
 
-    override suspend fun getVitalSigns(): List<VitalSign> {
-        return dao.getVitalSigns()
+    override suspend fun setVitalSigns() {
+        vitalSigns = dao.getVitalSigns()
     }
 
-    override suspend fun getSymptoms(): List<Symptom> {
-        return dao.getSymptoms()
+    override suspend fun setSymptoms() {
+        symptoms = dao.getSymptoms()
     }
 
-    override suspend fun getUserSymptoms(): List<uSymptoms> {
-        return dao.getUserSymptoms(userId.value)
+    override suspend fun setUserSymptoms() {
+        userSymptoms = dao.getUserSymptoms(userId!!)
     }
 
-    override suspend fun getUserMeds(): List<uMedications> {
-        return dao.getUserMeds(userId.value)
+    override suspend fun setUserMeds() {
+        userMedications = dao.getUserMeds(userId!!)
     }
 
-    override suspend fun getDoseUnits(): List<DoseUnit> {
-        return dao.getDoseUnits()
+    override suspend fun setDoseUnits() {
+        doseUnits = dao.getDoseUnits()
     }
 
-    override suspend fun getFrequencies(): List<Frequency> {
-        return dao.getFrequencies()
+    override suspend fun setFrequencies() {
+        frequencies = dao.getFrequencies()
     }
 
-    override suspend fun getMedication(): List<Medication> {
-        return dao.getMedication()
+    override suspend fun setMedication() {
+        medications = dao.getMedication()
     }
 
-    override suspend fun getAdminMethods(): List<AdministrationMethod> {
-        return dao.getAdminMethods()
+    override suspend fun setAdminMethods() {
+        adminMethods = dao.getAdminMethods()
     }
 
-    override suspend fun getRiskFactors(): List<RiskFactor> {
-        return dao.getRiskFactors()
+    override suspend fun setRiskFactors() {
+        riskFactors = dao.getRiskFactors()
     }
 
-    override suspend fun getUserRiskFactors(): List<uRiskFactors> {
-        return dao.getUserRiskFactors(userId.value)
+    override suspend fun setUserRiskFactors() {
+        userRiskFactors = dao.getUserRiskFactors(userId!!)
     }
 
-    override suspend fun getConditions(): List<Condition> {
-        return dao.getConditions()
+    override suspend fun setConditions(){
+        conditions = dao.getConditions()
     }
 
-    override suspend fun getUserConditions(): List<uConditions> {
-        return dao.getUserConditions(userId.value)
+    override suspend fun setUserConditions(){
+        userConditions = dao.getUserConditions(userId!!)
     }
 
     override suspend fun insertDummyValues()
@@ -255,6 +375,31 @@ class HealthRepo(app : Application) : IHealthRepo {
 
     override suspend fun insertUserConditions(uc: uConditions) {
         dao.insertUserConditions(uc)
+    }
+
+    override fun addUserVitals(uv: uVitals)
+    {
+       userVitalSigns = listOf(uv) + userVitalSigns
+    }
+
+    override fun addUserSymptoms(us: uSymptoms)
+    {
+        userSymptoms = listOf(us) + userSymptoms
+    }
+
+    override fun addUserMeds(umed: uMedications)
+    {
+        userMedications = listOf(umed) + userMedications
+    }
+
+    override fun addUserRiskFactors(urf: uRiskFactors)
+    {
+        userRiskFactors = listOf(urf) + userRiskFactors
+    }
+
+    override fun addUserConditions(uc: uConditions)
+    {
+        userConditions = listOf(uc) + userConditions
     }
 
 

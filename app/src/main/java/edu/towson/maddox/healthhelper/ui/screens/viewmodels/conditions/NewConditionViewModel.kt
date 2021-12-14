@@ -1,37 +1,57 @@
 package edu.towson.maddox.healthhelper.ui.screens.viewmodels.conditions
 
-import android.app.Application
 import androidx.lifecycle.viewModelScope
 import edu.towson.maddox.healthhelper.data.model.conditions.Condition
 import edu.towson.maddox.healthhelper.data.model.conditions.uConditions
+import edu.towson.maddox.healthhelper.data.repo.HealthRepo
 import edu.towson.maddox.healthhelper.ui.screens.viewmodels.generics.NewItemViewModel
 import kotlinx.coroutines.launch
 
-class NewConditionViewModel(app : Application) : NewItemViewModel<Condition, Int?, Int?, Int?>(app)
+class NewConditionViewModel(private val repo : HealthRepo) : NewItemViewModel<Condition, Int?, Int?, Int?>()
 {
     init
     {
         viewModelScope.launch { setItems() }
     }
 
-    override suspend fun setSubItems1(): List<Condition>
+    override fun setSubItems1(): List<Condition>
     {
-        return repo.getConditions() ?: listOf()
+        return repo.getConditions()
     }
 
-    override suspend fun setSubItems2(): List<Int?> {
+    override fun setSubItems2(): List<Int?> {
         return listOf()
     }
 
-    override suspend fun setSubItems3(): List<Int?> {
+    override fun setSubItems3(): List<Int?> {
         return listOf()
     }
 
-    override suspend fun setSubItems4(): List<Int?> {
+    override fun setSubItems4(): List<Int?> {
         return listOf()
     }
 
-    override suspend fun addUserItem() {
-        repo.insertUserConditions(uConditions(user_id = repo.returnUserId(), subItems1.value[selectedIndex1.value].condition_id,getStartDate(),getEndDate()))
+    override fun addUserItem() {
+        if (selectedIndex1.value == null || getStartDate()=="")
+        {
+            toggleErrorPopupVisible()
+            throw Exception("error")
+        }
+        else
+        {
+            val item = uConditions(
+                user_id = repo.returnUserId(),
+                subItems1.value[selectedIndex1.value!!].condition_id,
+                getStartDate(),
+                getEndDate()
+            )
+            repo.addUserConditions(item)
+
+            viewModelScope.launch {
+                repo.insertUserConditions(item)
+                repo.setUserConditions()
+            }
+        }
+
     }
 }

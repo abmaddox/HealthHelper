@@ -8,6 +8,7 @@ import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import edu.towson.maddox.healthhelper.nav.Root
+import edu.towson.maddox.healthhelper.nav.RootViewModel
 import edu.towson.maddox.healthhelper.ui.theme.HealthHelperTheme
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 
@@ -21,10 +22,10 @@ class MainActivity : ComponentActivity() {
             HealthHelperTheme {
                 // A surface container using the 'background' color from the theme
                 Surface(color = MaterialTheme.colors.background) {
-                    Root()
+                    val rootViewModel = RootViewModel(application)
+                    Root(rootViewModel)
                 }
             }
         }
     }
 }
-

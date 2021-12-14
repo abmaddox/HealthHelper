@@ -20,30 +20,61 @@ interface IHealthRepo {
         fun returnUserId(): Int
 
         //Vital sign
-        suspend fun getUserVitals() : List<uVitals>?
-        suspend fun getRecordingMethods() : List<RecordingMethod>?
-        suspend fun getVitalSigns() : List<VitalSign>?
+        fun getUserVitals() : List<uVitals>
+        fun getRecordingMethods() : List<RecordingMethod>
+        fun getVitalSigns() : List<VitalSign>
 
         //Symptoms
-        suspend fun getSymptoms() : List<Symptom>?
-        suspend fun getUserSymptoms() : List<uSymptoms>?
+        fun getSymptoms() : List<Symptom>
+        fun getUserSymptoms() : List<uSymptoms>
 
         //Medications
-        suspend fun getUserMeds() : List<uMedications>?
-        suspend fun getDoseUnits() : List<DoseUnit>?
-        suspend fun getFrequencies() : List<Frequency>?
-        suspend fun getMedication() : List<Medication>?
-        suspend fun getAdminMethods() : List<AdministrationMethod>?
+        fun getUserMeds() : List<uMedications>
+        fun getDoseUnits() : List<DoseUnit>
+        fun getFrequencies() : List<Frequency>
+        fun getMedication() : List<Medication>
+        fun getAdminMethods() : List<AdministrationMethod>
 
         //Risk factors
-        suspend fun getRiskFactors() : List<RiskFactor>?
-        suspend fun getUserRiskFactors() : List<uRiskFactors>?
+        fun getRiskFactors() : List<RiskFactor>
+        fun getUserRiskFactors() : List<uRiskFactors>
 
         //Conditions
-        suspend fun getConditions() : List<Condition>?
-        suspend fun getUserConditions() : List<uConditions>?
+        fun getConditions() : List<Condition>
+        fun getUserConditions() : List<uConditions>
 
-        //SETTERS
+//Internal setters
+
+        fun setUserId(i : Int)
+        suspend fun loadDefaults()
+        fun loadUserItems()
+
+        //Vital sign
+        suspend fun setUserVitals()
+        suspend fun setRecordingMethods()
+        suspend fun setVitalSigns()
+
+        //Symptoms
+        suspend fun setSymptoms()
+        suspend fun setUserSymptoms()
+
+        //Medications
+        suspend fun setUserMeds()
+        suspend fun setDoseUnits()
+        suspend fun setFrequencies()
+        suspend fun setMedication()
+        suspend fun setAdminMethods()
+
+        //Risk factors
+        suspend fun setRiskFactors()
+        suspend fun setUserRiskFactors()
+
+        //Conditions
+        suspend fun setConditions()
+        suspend fun setUserConditions()
+
+
+        //Inserters
 
         //Sample Data
         suspend fun insertDummyValues()
@@ -75,6 +106,22 @@ interface IHealthRepo {
         suspend fun insertConditions(c : Condition)
         suspend fun insertUserConditions(uc : uConditions)
 
+        //Internal inserters
+        //Vital sign
+        fun addUserVitals(uv : uVitals)
+
+        //Symptoms
+        fun addUserSymptoms(us : uSymptoms)
+
+        //Medications
+        fun addUserMeds(umed : uMedications)
+
+        //Risk factors
+        fun addUserRiskFactors(urf : uRiskFactors)
+
+        //Conditions
+        fun addUserConditions(uc : uConditions)
+
     //UPDATERS
 
         //User
@@ -104,7 +151,7 @@ interface IHealthRepo {
         suspend fun updateConditions(c : Condition)
         suspend fun updateUserConditions(uc : uConditions)
 
-//DELETERS
+//DELETES
         //TODO implement deletion according to integrity constraints
 //        //User
 //        @Delete

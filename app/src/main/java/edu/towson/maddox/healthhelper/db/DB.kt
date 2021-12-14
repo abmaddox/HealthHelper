@@ -4,8 +4,6 @@ import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
-import androidx.room.TypeConverters
-import edu.towson.maddox.healthhelper.data.model.Converters
 import edu.towson.maddox.healthhelper.data.model.User
 import edu.towson.maddox.healthhelper.data.model.conditions.Condition
 import edu.towson.maddox.healthhelper.data.model.conditions.uConditions
@@ -35,7 +33,6 @@ import edu.towson.maddox.healthhelper.data.model.vitals.uVitals
     Condition::class,
     uConditions::class
 ], version=7)
-@TypeConverters(Converters::class)
 abstract class DB : RoomDatabase() {
     abstract fun healthDAO() : HealthDAO
     companion object {

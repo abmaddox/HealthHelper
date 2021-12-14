@@ -12,42 +12,42 @@ import androidx.compose.ui.Modifier
 
 @Composable
 fun Home(
-        user_id: Int,
-        onMedicationsClick: (Int) -> Unit,
-        onConditionsClick: (Int) -> Unit,
-        onRiskFactorsClick: (Int) -> Unit,
-        onVitalsClick: (Int) -> Unit,
-        onSymptomsClick: (Int) -> Unit,
+        onMedicationsClick: () -> Unit,
+        onConditionsClick: () -> Unit,
+        onRiskFactorsClick: () -> Unit,
+        onVitalsClick: () -> Unit,
+        onSymptomsClick: () -> Unit,
 ){
         Column(modifier = Modifier
                 .fillMaxWidth()
                 .fillMaxHeight(),
                 horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.SpaceEvenly) {
+                verticalArrangement = Arrangement.SpaceEvenly)
+        {
+
+                
+                Button(onClick = {onMedicationsClick()}) {
+                        Text(text = "Medications")
+                }
+
+                Button(onClick = {onConditionsClick()}) {
+                        Text(text = "Medical Conditions")
+                }
 
 
-                        Button(onClick = {onMedicationsClick(user_id)}) {
-                                Text(text = "Medications")
-                        }
 
-                        Button(onClick = {onConditionsClick(user_id)}) {
-                                Text(text = "Medical Conditions")
-                        }
+                Button(onClick = {onRiskFactorsClick()}) {
+                        Text(text = "Risk Factors")
+                }
 
-
-
-                        Button(onClick = {onRiskFactorsClick(user_id)}) {
-                                Text(text = "Risk Factors")
-                        }
-
-                        Button(onClick = {onVitalsClick(user_id)}) {
-                                Text(text = "Vital Signs")
-                        }
+                Button(onClick = {onVitalsClick()}) {
+                        Text(text = "Vital Signs")
+                }
 
 
-                        Button(onClick = {onSymptomsClick(user_id)}) {
-                                Text(text = "Symptoms")
-
-                        }
+                Button(onClick = {onSymptomsClick()}) {
+                        Text(text = "Symptoms")
                 }
         }
+}
+

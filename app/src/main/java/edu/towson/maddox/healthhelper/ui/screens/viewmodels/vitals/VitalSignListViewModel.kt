@@ -1,43 +1,43 @@
 package edu.towson.maddox.healthhelper.ui.screens.viewmodels.vitals
 
-import android.app.Application
 import androidx.lifecycle.viewModelScope
 import edu.towson.maddox.healthhelper.data.model.vitals.RecordingMethod
 import edu.towson.maddox.healthhelper.data.model.vitals.VitalSign
 import edu.towson.maddox.healthhelper.data.model.vitals.uVitals
+import edu.towson.maddox.healthhelper.data.repo.HealthRepo
 import edu.towson.maddox.healthhelper.ui.screens.viewmodels.generics.ItemListViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.launch
 
 @ExperimentalCoroutinesApi
-class VitalSignListViewModel(app : Application) : ItemListViewModel<uVitals, VitalSign, RecordingMethod, Int?, Int?>(app)
+class VitalSignListViewModel(private val repo : HealthRepo) : ItemListViewModel<uVitals, VitalSign, RecordingMethod, Int?, Int?>(repo)
 {
     init
     {
         viewModelScope.launch { setItems() }
     }
 
-    override suspend fun setUserItems(): List<uVitals>
+    override fun setUserItems(): List<uVitals>
     {
-        return repo.getUserVitals() ?: listOf()
+        return repo.getUserVitals()
     }
 
-    override suspend fun setSubItems1(): List<VitalSign>
+    override fun setSubItems1(): List<VitalSign>
     {
-        return repo.getVitalSigns() ?: listOf()
+        return repo.getVitalSigns()
     }
 
-    override suspend fun setSubItems2(): List<RecordingMethod>
+    override fun setSubItems2(): List<RecordingMethod>
     {
-        return repo.getRecordingMethods() ?: listOf()
+        return repo.getRecordingMethods()
     }
 
-    override suspend fun setSubItems3(): List<Int?>
+    override fun setSubItems3(): List<Int?>
     {
         return emptyList()
     }
 
-    override suspend fun setSubItems4(): List<Int?>
+    override fun setSubItems4(): List<Int?>
     {
         return emptyList()
     }
@@ -62,11 +62,8 @@ class VitalSignListViewModel(app : Application) : ItemListViewModel<uVitals, Vit
         return null
     }
 
-    override fun deleteUserItem(item: uVitals)
+    override suspend fun deleteUserItemFromDb(item: uVitals)
     {
-        viewModelScope.launch{
-            repo.deleteUserVital(item)
-            reloadUserItems()
-        }
+        repo.deleteUserVital(item)
     }
 }

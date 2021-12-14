@@ -1,23 +1,21 @@
 package edu.towson.maddox.healthhelper.nav
 
 import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.ExperimentalMaterialApi
-import androidx.compose.material.Icon
-import androidx.compose.material.Scaffold
-import androidx.compose.material.Text
+import androidx.compose.material.*
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import edu.towson.maddox.healthhelper.R
+import edu.towson.maddox.healthhelper.ui.components.Header
 import edu.towson.maddox.healthhelper.ui.screens.composables.conditions.ConditionList
 import edu.towson.maddox.healthhelper.ui.screens.composables.conditions.NewConditionScreen
 import edu.towson.maddox.healthhelper.ui.screens.composables.main.Home
@@ -49,26 +47,29 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 @ExperimentalFoundationApi
 @ExperimentalMaterialApi
 @Composable
-fun Root() {
+fun Root(vm : RootViewModel) {
     Scaffold(
         topBar = {
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth(),
-                horizontalArrangement = Arrangement.Center
-            ) {
-                Spacer(Modifier.padding(vertical = 10.dp))
-                Icon(
-                    painter = painterResource(id = R.drawable.health_helper_logo),
-                    contentDescription = null,
-                    modifier = Modifier
-                        .size(30.dp, 30.dp)
-                )
-                Text(text = "Health Helper", fontSize = 30.sp)
+            Column(modifier = Modifier
+                .fillMaxWidth()
+                .background(MaterialTheme.colors.secondary),
+            horizontalAlignment = Alignment.CenterHorizontally) {
+                Row(
+                    horizontalArrangement = Arrangement.Center
+                ) {
+                    Icon(
+                        painter = painterResource(id = R.drawable.health_helper_logo),
+                        contentDescription = null,
+                        modifier = Modifier
+                            .size(30.dp, 30.dp)
+                    )
+                    Text(text = "Health Helper", fontSize = 30.sp)
+                }
+                Divider(thickness = 5.dp, color = Color.LightGray)
             }
+
         }
     ) {
-            val userId = rememberSaveable { mutableStateOf(0) }
             val navController = rememberNavController()
 
             NavHost(navController = navController, startDestination = Routes.Login.route) {
@@ -76,13 +77,12 @@ fun Root() {
                 //Login page
                 composable(Routes.Login.route)
                 {
-                    val loginViewModel : LoginViewModel = viewModel()
+                    val loginViewModel = LoginViewModel(vm.repo)
                     Login(vm = loginViewModel,
                         onLoginClick = { user_id ->
-                            userId.value = user_id
-                            navController.navigate(Routes.Home.route){
-                                launchSingleTop = true
-                            }
+                            vm.repo.setUserId(user_id)
+                            vm.repo.loadUserItems()
+                            navController.navigate(Routes.Loading.route)
                         },
                         onSignupClick = { navController.navigate(Routes.Signup.route){
                             launchSingleTop = true
@@ -92,7 +92,7 @@ fun Root() {
                 //Signup page
                 composable(Routes.Signup.route)
                 {
-                    val signupViewModel : SignupViewModel = viewModel()
+                    val signupViewModel = SignupViewModel(vm.repo)
                     Signup(onSignupClick = { navController.navigate(Routes.Login.route){
                         launchSingleTop = true
                     } },
@@ -103,12 +103,28 @@ fun Root() {
                     )
                 }
 
+                composable(Routes.Loading.route){
+                    Column(modifier = Modifier.fillMaxSize(),
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                        verticalArrangement = Arrangement.Center)
+                    {
+                        Header(text = "Loading, please wait.")
+                        CircularProgressIndicator()
+                        if(!vm.waiting.value){
+                            navController.navigate(Routes.Home.route){
+                                launchSingleTop = true
+                            }
+                        }
+                        else
+                            vm.checkWaiting()
+                    }
+                }
+
 
                 //Main menu
                 composable(Routes.Home.route)
                 {
                     Home(
-                        user_id = userId.value,
                         onConditionsClick = {
                             navController.navigate(Routes.Conditions.route){
                                 launchSingleTop = true
@@ -143,7 +159,7 @@ fun Root() {
                 //Vital Sign main page
                 composable(Routes.Vitals.route)
                 {
-                    val vitalsListViewModel : VitalSignListViewModel = viewModel()
+                    val vitalsListViewModel = VitalSignListViewModel(vm.repo)
                     VitalSignList(vm = vitalsListViewModel) {
                         navController.navigate(Routes.AddVital.route){
                             launchSingleTop = true
@@ -154,14 +170,10 @@ fun Root() {
                 //Add new vital sign page
                 composable(Routes.AddVital.route)
                 {
-                    val newVitalSignViewModel : NewVitalSignViewModel = viewModel()
-                    NewVitalSignScreen(vm = newVitalSignViewModel)
-                    {
-                        navController.navigate(Routes.Vitals.route)
-                        {
-                            launchSingleTop = true
-                        }
-                    }
+                    val newVitalSignViewModel = NewVitalSignViewModel(vm.repo)
+                    NewVitalSignScreen(vm = newVitalSignViewModel, onCancel = {
+                        navController.popBackStack()
+                    })
                 }
 
 
@@ -170,7 +182,7 @@ fun Root() {
                 //Conditions main page
                 composable(Routes.Conditions.route)
                 {
-                    val conditionListViewModel : ConditionListViewModel = viewModel()
+                    val conditionListViewModel = ConditionListViewModel(vm.repo)
                     ConditionList(vm = conditionListViewModel,
                         onClickFAB = {
                             navController.navigate(Routes.AddCondition.route)
@@ -182,12 +194,10 @@ fun Root() {
                 //Add new condition page
                 composable(Routes.AddCondition.route)
                 {
-                    val newConditionViewModel : NewConditionViewModel = viewModel()
-                    NewConditionScreen(vm = newConditionViewModel) {
-                        navController.navigate(Routes.Conditions.route){
-                            launchSingleTop = true
-                        }
-                    }
+                    val newConditionViewModel = NewConditionViewModel(vm.repo)
+                    NewConditionScreen(vm = newConditionViewModel, onCancel = {
+                        navController.popBackStack()
+                    })
                 }
 
 
@@ -196,7 +206,7 @@ fun Root() {
                 //Medications main page
                 composable(Routes.Medications.route)
                 {
-                    val medListViewModel : MedListViewModel = viewModel()
+                    val medListViewModel = MedListViewModel(vm.repo)
                     MedicationList(vm = medListViewModel) {
                         navController.navigate(Routes.AddMedication.route){
                             launchSingleTop = true
@@ -206,12 +216,10 @@ fun Root() {
                 //Add new medication page
                 composable(Routes.AddMedication.route)
                 {
-                    val newMedViewModel : NewMedViewModel = viewModel()
-                    NewMedicationScreen(vm = newMedViewModel) {
-                        navController.navigate(Routes.Medications.route){
-                            launchSingleTop = true
-                        }
-                    }
+                    val newMedViewModel = NewMedViewModel(vm.repo)
+                    NewMedicationScreen(vm = newMedViewModel, onCancel = {
+                        navController.popBackStack()
+                    })
                 }
 
 
@@ -219,7 +227,7 @@ fun Root() {
                 //Risk factors main page
                 composable(Routes.RiskFactors.route)
                 {
-                    val riskFactorsListViewModel : RiskFactorsListViewModel = viewModel()
+                    val riskFactorsListViewModel = RiskFactorsListViewModel(vm.repo)
                     RiskFactorsList(vm = riskFactorsListViewModel) {
                         navController.navigate(Routes.AddRiskFactor.route){
                             launchSingleTop = true
@@ -229,12 +237,10 @@ fun Root() {
                 //Add new risk factor page
                 composable(Routes.AddRiskFactor.route)
                 {
-                    val newRiskFactorViewModel : NewRiskFactorViewModel = viewModel()
-                    NewRiskFactorScreen(vm = newRiskFactorViewModel) {
-                        navController.navigate(Routes.RiskFactors.route){
-                            launchSingleTop = true
-                        }
-                    }
+                    val newRiskFactorViewModel = NewRiskFactorViewModel(vm.repo)
+                    NewRiskFactorScreen(vm = newRiskFactorViewModel, onCancel = {
+                        navController.popBackStack()
+                    })
                 }
 
 
@@ -242,7 +248,7 @@ fun Root() {
                 //Symptoms main page
                 composable(Routes.Symptoms.route)
                 {
-                    val symptomsListViewModel : SymptomsListViewModel = viewModel()
+                    val symptomsListViewModel = SymptomsListViewModel(vm.repo)
                     SymptomsList(vm = symptomsListViewModel) {
                         navController.navigate(Routes.AddSymptom.route){
                             launchSingleTop = true
@@ -252,14 +258,13 @@ fun Root() {
                 //Add new symptom page
                 composable(Routes.AddSymptom.route)
                 {
-                    val newSymptomListViewModel : NewSymptomViewModel = viewModel()
-                    NewSymptomScreen(vm = newSymptomListViewModel) {
-                        navController.navigate(Routes.Symptoms.route){
-                            launchSingleTop = true
-                        }
-                    }
+                    val newSymptomListViewModel = NewSymptomViewModel(vm.repo)
+                    NewSymptomScreen(vm = newSymptomListViewModel, onCancel = {
+                        navController.popBackStack()
+                    })
                 }
             }
         }
     }
+
 

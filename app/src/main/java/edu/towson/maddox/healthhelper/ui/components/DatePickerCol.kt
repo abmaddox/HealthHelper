@@ -1,14 +1,17 @@
 package edu.towson.maddox.healthhelper.ui.components
 
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
-import edu.towson.maddox.healthhelper.ui.screens.viewmodels.generics.INewItemViewModel
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
+import edu.towson.maddox.healthhelper.ui.screens.viewmodels.generics.NewItemViewModel
 import java.time.LocalDate
 
 @Composable
-fun DatePickerRow(
+fun DatePickerCol(
     rowLabel: String = "Start Date:",
     isDayExpanded: Boolean,
     isMonthExpanded: Boolean,
@@ -16,54 +19,56 @@ fun DatePickerRow(
     selectedDay: Int,
     selectedMonth: Int,
     selectedYear: Int,
-    setDay: (Int) -> Unit,
-    setMonth: (Int) -> Unit,
-    setYear: (Int) -> Unit,
+    setDay: (String, Int) -> Unit,
+    setMonth: (String, Int) -> Unit,
+    setYear: (String, Int) -> Unit,
     toggleDays: (Boolean?) -> Unit,
     toggleMonths: (Boolean?) -> Unit,
     toggleYears: (Boolean?) -> Unit
 ){
-    Row() {
+    Column {
         var days = listOf("")+(1..getMaxDays(selectedMonth+1, selectedYear+1)).map{ i -> i.toString()}
         var months = listOf("")+(1..12).map{i -> i.toString()}
         var years = listOf("")+(1930..LocalDate.now().year).map{ i -> i.toString()}
 
+        Spacer(modifier = Modifier.padding(10.dp))
         Text(text = rowLabel)
-        Column{
             Text(text = "Select Day")
             ComposeMenu(
                 menuItems = days,
                 menuExpandedState = isDayExpanded,
                 itemTypes = "days",
-                updateMenuExpandStatus = { toggleDays(null) },
+                toggleMenuExpandStatus = { toggleDays(null) },
                 onDismissMenuView = { toggleDays(false) },
-                onMenuItemClick = { setDay(days[it].toInt()) }
+                onMenuItemClick = { setDay(days[it],it) },
+                selectedIndex = selectedDay
             )
-        }
 
-        Column{
+        Spacer(modifier = Modifier.padding(10.dp))
+
             Text(text = " Select Month")
             ComposeMenu(
                 menuItems = months,
                 menuExpandedState = isMonthExpanded,
                 itemTypes = "months",
-                updateMenuExpandStatus = { toggleMonths(null) },
+                toggleMenuExpandStatus = { toggleMonths(null) },
                 onDismissMenuView = { toggleMonths(false) },
-                onMenuItemClick ={ setMonth(months[it].toInt()) }
+                onMenuItemClick ={ setMonth(months[it],it) },
+                selectedIndex = selectedMonth
             )
-        }
 
-        Column{
+        Spacer(modifier = Modifier.padding(10.dp))
             Text(text = "Select Year")
             ComposeMenu(
                 menuItems = years,
                 menuExpandedState = isYearExpanded,
                 itemTypes = "years",
-                updateMenuExpandStatus = { toggleYears(null) },
+                toggleMenuExpandStatus = { toggleYears(null) },
                 onDismissMenuView = { toggleYears(false) },
-                onMenuItemClick ={ setYear(years[it].toInt()) }
+                onMenuItemClick ={ setYear(years[it], it) },
+                selectedIndex = selectedYear
             )
-        }
+
     }
 }
 fun getMaxDays(month : Int, year: Int):Int{
@@ -76,23 +81,26 @@ fun getMaxDays(month : Int, year: Int):Int{
 
 @Composable
 fun <A,B,C,D> StartEndDatePicker(
-    vm: INewItemViewModel<A, B, C, D>
+    vm: NewItemViewModel<A, B, C, D>
 ){
-    DatePickerRow(
+    DatePickerCol(
         isDayExpanded = vm.isStartDayExpanded.value,
         isMonthExpanded = vm.isStartMonthExpanded.value,
         isYearExpanded = vm.isStartYearExpanded.value,
         selectedDay = vm.startDaySelectedIndex.value,
         selectedMonth = vm.startMonthSelectedIndex.value,
         selectedYear = vm.startYearSelectedIndex.value,
-        setDay = {vm.setSelectedStartDayIndex(it)},
-        setMonth ={vm.setSelectedStartMonthIndex(it)} ,
-        setYear = {vm.setSelectedStartYearIndex(it)},
+        setDay = {s, i-> vm.setSelectedStartDayIndex(i)
+                 vm.setStartDay(s)},
+        setMonth ={s, i-> vm.setSelectedStartMonthIndex(i)
+            vm.setStartMonth(s)} ,
+        setYear = {s, i-> vm.setSelectedStartYearIndex(i)
+            vm.setStartYear(s)},
         toggleDays = {vm.toggleIsStartDayExpanded(null)},
         toggleMonths = {vm.toggleIsStartMonthExpanded(null)},
         toggleYears = {vm.toggleIsStartYearExpanded(null)}
     )
-    DatePickerRow(
+    DatePickerCol(
         rowLabel= "End Date",
         isDayExpanded = vm.isEndDayExpanded.value,
         isMonthExpanded = vm.isEndMonthExpanded.value,
@@ -100,9 +108,12 @@ fun <A,B,C,D> StartEndDatePicker(
         selectedDay = vm.endDaySelectedIndex.value,
         selectedMonth = vm.endMonthSelectedIndex.value,
         selectedYear = vm.endYearSelectedIndex.value,
-        setDay = {vm.setSelectedEndDayIndex(it)},
-        setMonth ={vm.setSelectedEndMonthIndex(it)} ,
-        setYear = {vm.setSelectedEndYearIndex(it)},
+        setDay = {s, i-> vm.setSelectedEndDayIndex(i)
+            vm.setEndDay(s)},
+        setMonth ={s, i-> vm.setSelectedEndMonthIndex(i)
+            vm.setEndMonth(s)} ,
+        setYear = {s, i-> vm.setSelectedEndYearIndex(i)
+            vm.setEndYear(s)},
         toggleDays = {vm.toggleIsEndDayExpanded(null)},
         toggleMonths = {vm.toggleIsEndMonthExpanded(null)} ,
         toggleYears = {vm.toggleIsEndYearExpanded(null)}

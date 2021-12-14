@@ -1,37 +1,36 @@
 package edu.towson.maddox.healthhelper.ui.screens.viewmodels.conditions
 
-import android.app.Application
 import androidx.lifecycle.viewModelScope
 import edu.towson.maddox.healthhelper.data.model.conditions.Condition
 import edu.towson.maddox.healthhelper.data.model.conditions.uConditions
+import edu.towson.maddox.healthhelper.data.repo.HealthRepo
 import edu.towson.maddox.healthhelper.ui.screens.viewmodels.generics.ItemListViewModel
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.launch
 
 @ExperimentalCoroutinesApi
-class ConditionListViewModel(app : Application) : ItemListViewModel<uConditions, Condition, Int?, Int?, Int?>(app = app)
+class ConditionListViewModel(private val repo : HealthRepo) : ItemListViewModel<uConditions, Condition, Int?, Int?, Int?>(repo = repo)
 {
     init
     {
         viewModelScope.launch { setItems() }
     }
 
-    override suspend fun setUserItems() : List<uConditions>
+    override fun setUserItems() : List<uConditions>
     {
-        return repo.getUserConditions() ?: listOf()
+        return repo.getUserConditions()
     }
 
-    override suspend fun setSubItems1() : List<Condition>
+    override fun setSubItems1() : List<Condition>
     {
-        return repo.getConditions() ?: listOf()
+        return repo.getConditions()
     }
 
-    override suspend fun setSubItems2() : List<Int?> {return listOf()}
+    override fun setSubItems2() : List<Int?> {return listOf()}
 
-    override suspend fun setSubItems3() : List<Int?> {return listOf()}
+    override fun setSubItems3() : List<Int?> {return listOf()}
 
-    override suspend fun setSubItems4() : List<Int?> {return listOf()}
+    override fun setSubItems4() : List<Int?> {return listOf()}
 
     override fun getSubItem1(subitem_id : Int): Condition
     {
@@ -50,11 +49,9 @@ class ConditionListViewModel(app : Application) : ItemListViewModel<uConditions,
         return null
     }
 
-    override fun deleteUserItem(item: uConditions)
+    override suspend fun deleteUserItemFromDb(item: uConditions)
     {
-        viewModelScope.launch(Dispatchers.IO) {
-            repo.deleteUserConditions(item)
-            reloadUserItems()
-        }
+        repo.deleteUserConditions(item)
     }
+
 }
