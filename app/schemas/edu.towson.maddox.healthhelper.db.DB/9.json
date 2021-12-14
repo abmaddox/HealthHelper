@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 9,
-    "identityHash": "d677baa9df07396397ab42c80659cdeb",
+    "identityHash": "abe3f23cb20faefc99edaf4ceb000501",
     "entities": [
       {
         "tableName": "user",
@@ -182,7 +182,7 @@
       },
       {
         "tableName": "uSymptoms",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`user_id` INTEGER NOT NULL, `symptom_id` INTEGER NOT NULL, `startDate` TEXT NOT NULL, `endDate` TEXT NOT NULL, `timestamp` TEXT NOT NULL, PRIMARY KEY(`user_id`, `symptom_id`, `timestamp`))",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`user_id` INTEGER NOT NULL, `symptom_id` INTEGER NOT NULL, `startDate` TEXT NOT NULL, `endDate` TEXT NOT NULL, PRIMARY KEY(`user_id`, `symptom_id`))",
         "fields": [
           {
             "fieldPath": "user_id",
@@ -207,19 +207,12 @@
             "columnName": "endDate",
             "affinity": "TEXT",
             "notNull": true
-          },
-          {
-            "fieldPath": "timestamp",
-            "columnName": "timestamp",
-            "affinity": "TEXT",
-            "notNull": true
           }
         ],
         "primaryKey": {
           "columnNames": [
             "user_id",
-            "symptom_id",
-            "timestamp"
+            "symptom_id"
           ],
           "autoGenerate": false
         },
@@ -228,7 +221,7 @@
       },
       {
         "tableName": "uVitals",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`user_id` INTEGER NOT NULL, `vital_id` INTEGER NOT NULL, `rMethod_id` INTEGER NOT NULL, `timestamp` TEXT NOT NULL, `measurement` REAL NOT NULL, PRIMARY KEY(`user_id`, `vital_id`, `rMethod_id`, `timestamp`, `measurement`))",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`user_id` INTEGER NOT NULL, `vital_id` INTEGER NOT NULL, `rMethod_id` INTEGER NOT NULL, `timestamp` TEXT NOT NULL, `measurement` REAL NOT NULL, PRIMARY KEY(`user_id`, `vital_id`, `rMethod_id`))",
         "fields": [
           {
             "fieldPath": "user_id",
@@ -265,9 +258,7 @@
           "columnNames": [
             "user_id",
             "vital_id",
-            "rMethod_id",
-            "timestamp",
-            "measurement"
+            "rMethod_id"
           ],
           "autoGenerate": false
         },
@@ -302,7 +293,7 @@
       },
       {
         "tableName": "uRiskFactors",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`user_id` INTEGER NOT NULL, `factor_id` INTEGER NOT NULL, `timestamp` TEXT NOT NULL, PRIMARY KEY(`user_id`, `factor_id`, `timestamp`))",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`user_id` INTEGER NOT NULL, `factor_id` INTEGER NOT NULL, PRIMARY KEY(`user_id`, `factor_id`))",
         "fields": [
           {
             "fieldPath": "user_id",
@@ -315,19 +306,12 @@
             "columnName": "factor_id",
             "affinity": "INTEGER",
             "notNull": true
-          },
-          {
-            "fieldPath": "timestamp",
-            "columnName": "timestamp",
-            "affinity": "TEXT",
-            "notNull": true
           }
         ],
         "primaryKey": {
           "columnNames": [
             "user_id",
-            "factor_id",
-            "timestamp"
+            "factor_id"
           ],
           "autoGenerate": false
         },
@@ -446,7 +430,7 @@
       },
       {
         "tableName": "uMedications",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`user_id` INTEGER NOT NULL, `medication_id` INTEGER NOT NULL, `frequency_id` INTEGER NOT NULL, `method_id` INTEGER NOT NULL, `unit_id` INTEGER NOT NULL, `startDate` TEXT NOT NULL, `endDate` TEXT NOT NULL, `reason` TEXT NOT NULL, `dosage` REAL NOT NULL, `timestamp` TEXT NOT NULL, PRIMARY KEY(`user_id`, `medication_id`, `frequency_id`, `method_id`, `unit_id`, `timestamp`))",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`user_id` INTEGER NOT NULL, `medication_id` INTEGER NOT NULL, `frequency_id` INTEGER NOT NULL, `method_id` INTEGER NOT NULL, `unit_id` INTEGER NOT NULL, `startDate` TEXT NOT NULL, `endDate` TEXT NOT NULL, `reason` TEXT NOT NULL, `dosage` REAL NOT NULL, PRIMARY KEY(`user_id`, `medication_id`, `frequency_id`, `method_id`, `unit_id`))",
         "fields": [
           {
             "fieldPath": "user_id",
@@ -501,12 +485,6 @@
             "columnName": "dosage",
             "affinity": "REAL",
             "notNull": true
-          },
-          {
-            "fieldPath": "timestamp",
-            "columnName": "timestamp",
-            "affinity": "TEXT",
-            "notNull": true
           }
         ],
         "primaryKey": {
@@ -515,8 +493,7 @@
             "medication_id",
             "frequency_id",
             "method_id",
-            "unit_id",
-            "timestamp"
+            "unit_id"
           ],
           "autoGenerate": false
         },
@@ -551,7 +528,7 @@
       },
       {
         "tableName": "uConditions",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`user_id` INTEGER NOT NULL, `condition_id` INTEGER NOT NULL, `startDate` TEXT NOT NULL, `endDate` TEXT NOT NULL, `timestamp` TEXT NOT NULL, PRIMARY KEY(`user_id`, `condition_id`, `timestamp`))",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`user_id` INTEGER NOT NULL, `condition_id` INTEGER NOT NULL, `startDate` TEXT NOT NULL, `endDate` TEXT NOT NULL, PRIMARY KEY(`user_id`, `condition_id`))",
         "fields": [
           {
             "fieldPath": "user_id",
@@ -576,19 +553,12 @@
             "columnName": "endDate",
             "affinity": "TEXT",
             "notNull": true
-          },
-          {
-            "fieldPath": "timestamp",
-            "columnName": "timestamp",
-            "affinity": "TEXT",
-            "notNull": true
           }
         ],
         "primaryKey": {
           "columnNames": [
             "user_id",
-            "condition_id",
-            "timestamp"
+            "condition_id"
           ],
           "autoGenerate": false
         },
@@ -599,7 +569,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'd677baa9df07396397ab42c80659cdeb')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'abe3f23cb20faefc99edaf4ceb000501')"
     ]
   }
 }
