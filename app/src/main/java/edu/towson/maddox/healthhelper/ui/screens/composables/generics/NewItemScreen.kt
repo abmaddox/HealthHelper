@@ -45,8 +45,28 @@ fun <A,B,C,D>NewItemScreen(
                     Text(text = "Okay")
                 }
             },
-            title = { Text(text ="Error: Fields were left blank", fontSize = 20.sp) },
-            text = { Text(text = "Please fill out all fields before saving.") })
+            title = { Text(text ="Error: 0.0 is not a valid entry.", fontSize = 20.sp) },
+            text = { Text(text = "Please type in a value.") })
+        }
+        if (vm.isNoChangePopupVisible.value)
+        {
+            AlertDialog(onDismissRequest = { vm.toggleNoChangePopupVisible() },
+                confirmButton = {
+                    Button(
+                        onClick = { vm.toggleNoChangePopupVisible()
+                        vm.proceedToAddUserItem()
+                            onCancel()}) {
+                        Text(text = "Confirm")
+                    }
+                },
+                dismissButton = {
+                    Button(
+                        onClick = { vm.toggleNoChangePopupVisible() }) {
+                        Text(text = "Cancel")
+                    }
+                },
+                title = { Text(text ="Notice: Some fields still have default choices!", fontSize = 20.sp) },
+                text = { Text(text = "If this was intentional click the 'Confirm' button. Otherwise, click 'Cancel'.") })
         }
         Row(horizontalArrangement = Arrangement.SpaceEvenly) {
             Button(onClick = {

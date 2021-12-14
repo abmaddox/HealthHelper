@@ -36,19 +36,24 @@ class NewSymptomViewModel(private val repo : HealthRepo) : NewItemViewModel<Symp
 
     override fun addUserItem()
     {
-        if (selectedIndex1.value == null || getStartDate()=="")
+        if (selectedIndex1.value == 1 || getStartDate()=="2010-1-1" ||getEndDate()=="2011-1-1")
         {
-            toggleErrorPopupVisible()
+            toggleNoChangePopupVisible()
             throw Exception("error")
         }
         else
         {
-            val item = uSymptoms(user_id = repo.returnUserId(), symptom_id = getSubItem1().symptom_id, startDate = getStartDate(), endDate = getEndDate())
-            repo.addUserSymptoms(item)
-            viewModelScope.launch {
-                repo.insertUserSymptoms(item)
-                repo.setUserSymptoms()
-            }
+            proceedToAddUserItem()
+        }
+    }
+
+    override fun proceedToAddUserItem()
+    {
+        val item = uSymptoms(user_id = repo.returnUserId(), symptom_id = getSubItem1().symptom_id, startDate = getStartDate(), endDate = getEndDate())
+        repo.addUserSymptoms(item)
+        viewModelScope.launch {
+            repo.insertUserSymptoms(item)
+            repo.setUserSymptoms()
         }
     }
 }

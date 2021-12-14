@@ -35,7 +35,7 @@ class HealthRepo (private val dao : HealthDAO, private val scope: CoroutineScope
     private var userRiskFactors : List<uRiskFactors> = listOf()
     private var userSymptoms : List<uSymptoms> = listOf()
     private var userVitalSigns : List<uVitals> = listOf()
-    private var waiting : Boolean = true
+
     init
     {
         scope.launch {

@@ -14,7 +14,7 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 fun ConditionList(vm : ConditionListViewModel,
                   onClickFAB : () -> Unit)
 {
-    ItemList(vm = vm, onDelete = { vm.deleteUserItem(it) }, listType = ItemTypes.uc.toString()){
+    ItemList(listType = ItemTypes.uc.toString(), vm = vm, onDelete = { vm.deleteUserItem(it) }, fab = {
         FAB(onClick = onClickFAB)
-    }
+    }, itemTypes = ItemTypes.uc)
 }

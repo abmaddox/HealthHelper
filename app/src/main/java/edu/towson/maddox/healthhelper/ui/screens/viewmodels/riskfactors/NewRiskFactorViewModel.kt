@@ -36,19 +36,23 @@ class NewRiskFactorViewModel(private val repo : HealthRepo) : NewItemViewModel<R
 
     override fun addUserItem()
     {
-        if (selectedIndex1.value == null)
+        if (selectedIndex1.value == 1)
         {
-            toggleErrorPopupVisible()
+            toggleNoChangePopupVisible()
             throw Exception("error")
         }
         else
         {
-            val item = uRiskFactors(user_id = repo.returnUserId(), factor_id = getSubItem1().factor_id)
-            repo.addUserRiskFactors(item)
-            viewModelScope.launch {
-                repo.insertUserRiskFactors(item)
-                repo.setUserRiskFactors()
-            }
+            proceedToAddUserItem()
+        }
+    }
+
+    override fun proceedToAddUserItem(){
+        val item = uRiskFactors(user_id = repo.returnUserId(), factor_id = getSubItem1().factor_id)
+        repo.addUserRiskFactors(item)
+        viewModelScope.launch {
+            repo.insertUserRiskFactors(item)
+            repo.setUserRiskFactors()
         }
     }
 }

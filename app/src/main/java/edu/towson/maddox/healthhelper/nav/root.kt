@@ -27,8 +27,8 @@ import edu.towson.maddox.healthhelper.ui.screens.composables.riskfactors.NewRisk
 import edu.towson.maddox.healthhelper.ui.screens.composables.riskfactors.RiskFactorsList
 import edu.towson.maddox.healthhelper.ui.screens.composables.symptoms.NewSymptomScreen
 import edu.towson.maddox.healthhelper.ui.screens.composables.symptoms.SymptomsList
+import edu.towson.maddox.healthhelper.ui.screens.composables.vitals.NewVitalSignScreen
 import edu.towson.maddox.healthhelper.ui.screens.composables.vitals.VitalSignList
-import edu.towson.maddox.healthhelper.ui.screens.composables.vitals.newvital.NewVitalSignScreen
 import edu.towson.maddox.healthhelper.ui.screens.viewmodels.conditions.ConditionListViewModel
 import edu.towson.maddox.healthhelper.ui.screens.viewmodels.conditions.NewConditionViewModel
 import edu.towson.maddox.healthhelper.ui.screens.viewmodels.main.LoginViewModel

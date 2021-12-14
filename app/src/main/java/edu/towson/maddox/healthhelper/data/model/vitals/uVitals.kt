@@ -3,7 +3,7 @@ package edu.towson.maddox.healthhelper.data.model.vitals
 import androidx.room.Entity
 import java.util.*
 
-@Entity(primaryKeys = ["user_id", "vital_id", "rMethod_id"])
+@Entity(primaryKeys = ["user_id", "vital_id", "rMethod_id","timestamp","measurement"])
 data class uVitals (
     val user_id : Int,
     val vital_id : Int,

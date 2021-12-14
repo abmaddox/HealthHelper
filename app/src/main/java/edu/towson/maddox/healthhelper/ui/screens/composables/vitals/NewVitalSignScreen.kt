@@ -1,4 +1,4 @@
-package edu.towson.maddox.healthhelper.ui.screens.composables.vitals.newvital
+package edu.towson.maddox.healthhelper.ui.screens.composables.vitals
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
@@ -31,7 +31,7 @@ NewItemScreen(vm = vm, onCancel =  onCancel ) {
                 label = "Measurement",
                 keyboardType = KeyboardType.Number
             )
-            Text(text = if (vm.selectedIndex1.value==null)"" else vm.subItems1.value[vm.selectedIndex1.value!!-1].unit)
+            Text(text = vm.subItems1.value[vm.selectedIndex1.value].unit)
         }
     }
 }

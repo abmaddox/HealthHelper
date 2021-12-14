@@ -16,15 +16,14 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 @Composable
 fun MedicationRow(vm : MedListViewModel,
                   item : uMedications){
-    Header(text = vm.getSubItem1(item.medication_id).toString() + "Dosage: ${item.dosage} ${vm.getSubItem4(item.unit_id)}")
+
     Column(horizontalAlignment = Alignment.CenterHorizontally, modifier = Modifier.fillMaxWidth())
     {
+        Header(text = vm.getSubItem1(item.medication_id).toString() + "Dosage: ${item.dosage} ${vm.getSubItem4(item.unit_id)}")
         Text(text = "Frequency : ${vm.getSubItem2(item.frequency_id)}")
         Text(text = "Administration Method: ${vm.getSubItem3(item.method_id)}")
-    }
-    Column(horizontalAlignment = Alignment.CenterHorizontally, modifier = Modifier.fillMaxWidth())
-    {
         StartAndEndDateText(uMedications = item)
         Text(text = "Reason For Taking : ${item.reason}")
     }
+
 }

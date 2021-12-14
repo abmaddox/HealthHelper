@@ -14,9 +14,10 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 @ExperimentalCoroutinesApi
 @Composable
 fun SymptomsRow(vm : SymptomsListViewModel, item : uSymptoms){
-    Header(text = vm.getSubItem1(item.symptom_id).symptomName)
+
     Column(horizontalAlignment = Alignment.CenterHorizontally, modifier = Modifier.fillMaxWidth())
     {
+        Header(text = vm.getSubItem1(item.symptom_id).symptomName)
         StartAndEndDateText(uSymptoms = item)
     }
 }

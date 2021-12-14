@@ -26,16 +26,16 @@ interface INewItemViewModel<A, B, C, D>{
     fun updateTextEntry(text : String)
 
     val isMenu1Expanded : MutableState<Boolean>
-    val selectedIndex1 : MutableState<Int?>
+    val selectedIndex1 : MutableState<Int>
 
     val isMenu2Expanded : MutableState<Boolean>
-    val selectedIndex2 : MutableState<Int?>
+    val selectedIndex2 : MutableState<Int>
 
     val isMenu3Expanded : MutableState<Boolean>
-    val selectedIndex3 : MutableState<Int?>
+    val selectedIndex3 : MutableState<Int>
 
     val isMenu4Expanded : MutableState<Boolean>
-    val selectedIndex4 : MutableState<Int?>
+    val selectedIndex4 : MutableState<Int>
 
     val isStartDayExpanded : MutableState<Boolean>
     val startDaySelectedIndex : MutableState<Int>
@@ -110,8 +110,11 @@ interface INewItemViewModel<A, B, C, D>{
     fun setSelectedEndYearIndex(i : Int)
     fun toggleIsEndYearExpanded(b : Boolean?)
 
+    val isNoChangePopupVisible: MutableState<Boolean>
     val isErrorPopupVisible: MutableState<Boolean>
     fun toggleErrorPopupVisible()
+    fun toggleNoChangePopupVisible()
+    fun proceedToAddUserItem()
 }
 
 abstract class NewItemViewModel<A, B, C, D> : INewItemViewModel<A, B, C, D>, ViewModel()
@@ -150,75 +153,75 @@ abstract class NewItemViewModel<A, B, C, D> : INewItemViewModel<A, B, C, D>, Vie
     private val _isMenu1Expanded : MutableState<Boolean> = mutableStateOf(false)
     override val isMenu1Expanded = _isMenu1Expanded
 
-    private val _selectedIndex1 : MutableState<Int?> = mutableStateOf(null)
+    private val _selectedIndex1 : MutableState<Int> = mutableStateOf(0)
     override val selectedIndex1 = _selectedIndex1
 
     private val _isMenu2Expanded : MutableState<Boolean> = mutableStateOf(false)
     override val isMenu2Expanded = _isMenu2Expanded
 
-    private val _selectedIndex2 : MutableState<Int?> = mutableStateOf(null)
+    private val _selectedIndex2 : MutableState<Int> = mutableStateOf(0)
     override val selectedIndex2= _selectedIndex2
 
     private val _isMenu3Expanded : MutableState<Boolean> = mutableStateOf(false)
     override val isMenu3Expanded = _isMenu3Expanded
 
-    private val _selectedIndex3 : MutableState<Int?> = mutableStateOf(null)
+    private val _selectedIndex3 : MutableState<Int> = mutableStateOf(0)
     override val selectedIndex3 = _selectedIndex3
 
     private val _isMenu4Expanded : MutableState<Boolean> = mutableStateOf(false)
     override val isMenu4Expanded = _isMenu4Expanded
 
-    private val _selectedIndex4 : MutableState<Int?> = mutableStateOf(null)
+    private val _selectedIndex4 : MutableState<Int> = mutableStateOf(0)
     override val selectedIndex4 = _selectedIndex4
 
     private val _isStartDayExpanded : MutableState<Boolean> = mutableStateOf(false)
     override val isStartDayExpanded = _isStartDayExpanded
 
-    private val _startDaySelectedIndex : MutableState<Int> = mutableStateOf(1)
+    private val _startDaySelectedIndex : MutableState<Int> = mutableStateOf(0)
     override val startDaySelectedIndex = _startDaySelectedIndex
 
 
     private val _isStartMonthExpanded : MutableState<Boolean> = mutableStateOf(false)
     override val isStartMonthExpanded = _isStartMonthExpanded
 
-    private val _startMonthSelectedIndex : MutableState<Int> = mutableStateOf(1)
+    private val _startMonthSelectedIndex : MutableState<Int> = mutableStateOf(0)
     override val startMonthSelectedIndex = _startMonthSelectedIndex
 
 
     private val _isStartYearExpanded : MutableState<Boolean> = mutableStateOf(false)
     override val isStartYearExpanded = _isStartYearExpanded
 
-    private val _startYearSelectedIndex : MutableState<Int> = mutableStateOf(59)
+    private val _startYearSelectedIndex : MutableState<Int> = mutableStateOf(80)
     override val startYearSelectedIndex = _startYearSelectedIndex
 
 
     private val _isEndDayExpanded : MutableState<Boolean> = mutableStateOf(false)
     override val isEndDayExpanded = _isEndDayExpanded
 
-    private val _endDaySelectedIndex : MutableState<Int> = mutableStateOf(1)
+    private val _endDaySelectedIndex : MutableState<Int> = mutableStateOf(0)
     override val endDaySelectedIndex = _endDaySelectedIndex
 
 
     private val _isEndMonthExpanded : MutableState<Boolean> = mutableStateOf(false)
     override val isEndMonthExpanded = _isEndMonthExpanded
 
-    private val _endMonthSelectedIndex : MutableState<Int> = mutableStateOf(1)
+    private val _endMonthSelectedIndex : MutableState<Int> = mutableStateOf(0)
     override val endMonthSelectedIndex = _endMonthSelectedIndex
 
 
     private val _isEndYearExpanded : MutableState<Boolean> = mutableStateOf(false)
     override val isEndYearExpanded = _isEndYearExpanded
 
-    private val _endYearSelectedIndex : MutableState<Int> = mutableStateOf(60)
+    private val _endYearSelectedIndex : MutableState<Int> = mutableStateOf(81)
     override val endYearSelectedIndex = _endYearSelectedIndex
 
-    private val _startDay : MutableState<String> = mutableStateOf("")
-    private val _startMonth : MutableState<String>  = mutableStateOf("")
-    private val _startYear : MutableState<String>  = mutableStateOf("")
+    private val _startDay : MutableState<String> = mutableStateOf("1")
+    private val _startMonth : MutableState<String>  = mutableStateOf("1")
+    private val _startYear : MutableState<String>  = mutableStateOf("2010")
 
-    private val _endDay : MutableState<String>  = mutableStateOf("")
-    private val _endMonth : MutableState<String>  = mutableStateOf("")
-    private val _endYear : MutableState<String>  = mutableStateOf("")
+    private val _endDay : MutableState<String>  = mutableStateOf("1")
+    private val _endMonth : MutableState<String>  = mutableStateOf("1")
+    private val _endYear : MutableState<String>  = mutableStateOf("2011")
 
     override val startDay = _startDay
     override val startMonth = _startMonth
@@ -249,39 +252,31 @@ abstract class NewItemViewModel<A, B, C, D> : INewItemViewModel<A, B, C, D>, Vie
     }
 
     override fun getStartDate(): String {
-        return if (startDay.value == "" || startMonth.value=="" || startYear.value=="")
-            ""
-        else{
-            "${startYear.value}-${startMonth.value}-${startDay.value}"
-        }
+        return "${startYear.value}-${startMonth.value}-${startDay.value}"
     }
 
     override fun getEndDate(): String {
-        return if (endDay.value == "" || endMonth.value=="" || endYear.value=="")
-            ""
-        else{
-            "${endYear.value}-${endMonth.value}-${endDay.value}"
-        }
+        return "${endYear.value}-${endMonth.value}-${endDay.value}"
     }
 
     override fun getSubItem1(): A
     {
-        return _subItems1.value[_selectedIndex1.value!!]
+        return _subItems1.value[_selectedIndex1.value]
     }
 
     override fun getSubItem2(): B
     {
-        return _subItems2.value[_selectedIndex2.value!!]
+        return _subItems2.value[_selectedIndex2.value]
     }
 
     override fun getSubItem3(): C
     {
-        return _subItems3.value[_selectedIndex3.value!!]
+        return _subItems3.value[_selectedIndex3.value]
     }
 
     override fun getSubItem4(): D
     {
-        return _subItems4.value[_selectedIndex4.value!!]
+        return _subItems4.value[_selectedIndex4.value]
     }
 
     override fun setItems(){
@@ -301,8 +296,16 @@ abstract class NewItemViewModel<A, B, C, D> : INewItemViewModel<A, B, C, D>, Vie
     private val _isErrorPopupVisible : MutableState<Boolean> = mutableStateOf(false)
     override val isErrorPopupVisible = _isErrorPopupVisible
 
-    override fun toggleErrorPopupVisible(){
+    private val _isNoChangePopupVisible = mutableStateOf(false)
+    override val isNoChangePopupVisible = _isNoChangePopupVisible
+
+    override fun toggleErrorPopupVisible()
+    {
         _isErrorPopupVisible.value = !_isErrorPopupVisible.value
+    }
+
+    override fun toggleNoChangePopupVisible(){
+        _isNoChangePopupVisible.value = !_isNoChangePopupVisible.value
     }
 
     override fun setSelectedIndex1(i : Int){

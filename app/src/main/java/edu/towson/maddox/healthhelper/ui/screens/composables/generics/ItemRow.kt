@@ -18,6 +18,7 @@ import edu.towson.maddox.healthhelper.data.model.medications.uMedications
 import edu.towson.maddox.healthhelper.data.model.riskFactors.uRiskFactors
 import edu.towson.maddox.healthhelper.data.model.symptoms.uSymptoms
 import edu.towson.maddox.healthhelper.data.model.vitals.uVitals
+import edu.towson.maddox.healthhelper.ui.components.ItemTypes
 import edu.towson.maddox.healthhelper.ui.screens.composables.conditions.ConditionRow
 import edu.towson.maddox.healthhelper.ui.screens.composables.medications.MedicationRow
 import edu.towson.maddox.healthhelper.ui.screens.composables.riskfactors.RiskFactorRow
@@ -38,8 +39,8 @@ fun <A,B,C,D,E> ItemRow(
     idx : Int,
     vm: IItemListViewModel<A, B, C, D, E>,
     item: A,
-    onDelete: (Int) -> Unit
-){
+    onDelete: (Int) -> Unit,
+    itemTypes: ItemTypes){
     Card(
         shape = RoundedCornerShape(5.dp),
         elevation = 16.dp,
@@ -58,14 +59,12 @@ fun <A,B,C,D,E> ItemRow(
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.SpaceEvenly
         ) {
-
-// Type specific information
-            when (item){
-                (item is uConditions) -> ConditionRow(item = item as uConditions, vm = vm as ConditionListViewModel)
-                (item is uVitals) -> VitalRow(item = item as uVitals,vm = vm as VitalSignListViewModel)
-                (item is uSymptoms) -> SymptomsRow(item = item as uSymptoms,vm = vm as SymptomsListViewModel)
-                (item is uRiskFactors) -> RiskFactorRow(item = item as uRiskFactors, vm = vm as RiskFactorsListViewModel)
-                (item is uMedications) -> MedicationRow(item = item as uMedications,vm = vm as MedListViewModel)
+            when (itemTypes){
+                ItemTypes.umed -> MedicationRow(vm = vm as MedListViewModel, item = item as uMedications)
+                ItemTypes.uc -> ConditionRow(vm = vm as ConditionListViewModel, item = item as uConditions)
+                ItemTypes.urf -> RiskFactorRow(vm = vm as RiskFactorsListViewModel, item = item as uRiskFactors)
+                ItemTypes.us -> SymptomsRow(vm = vm as SymptomsListViewModel, item = item as uSymptoms)
+                ItemTypes.uv -> VitalRow(vm = vm as VitalSignListViewModel, item = item as uVitals)
             }
         }
     }
@@ -79,16 +78,24 @@ fun StartAndEndDateText(
 ){
     Row(horizontalArrangement = Arrangement.SpaceEvenly, modifier = Modifier.fillMaxWidth()) {
         if (uConditions != null){
-            Text(text = "Start Date: ${uConditions.startDate}", Modifier.padding(end = 5.dp))
-            Text(text = "End Date: ${uConditions.endDate}", Modifier.padding(end = 5.dp))
+            Text(text = "Start Date: ${uConditions.startDate}",
+                modifier = Modifier.padding(end = 5.dp)
+            )
+            Text(text = "End Date: ${uConditions.endDate}", modifier = Modifier.padding(end = 5.dp))
         }
         if (uMedications != null){
-            Text(text = "Start Date: ${uMedications.startDate}", Modifier.padding(end = 5.dp))
-            Text(text = "End Date: ${uMedications.endDate}", Modifier.padding(end = 5.dp))
+            Text(text = "Start Date: ${uMedications.startDate}",
+                modifier = Modifier.padding(end = 5.dp)
+            )
+            Text(text = "End Date: ${uMedications.endDate}",
+                modifier = Modifier.padding(end = 5.dp)
+            )
         }
         if (uSymptoms != null){
-            Text(text = "Start Date: ${uSymptoms.startDate}", Modifier.padding(end = 5.dp))
-            Text(text = "End Date: ${uSymptoms.endDate}", Modifier.padding(end = 5.dp))
+            Text(text = "Start Date: ${uSymptoms.startDate}",
+                modifier = Modifier.padding(end = 5.dp)
+            )
+            Text(text = "End Date: ${uSymptoms.endDate}", modifier = Modifier.padding(end = 5.dp))
         }
     }
 }

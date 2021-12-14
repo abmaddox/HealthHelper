@@ -24,4 +24,8 @@ class RootViewModel(app : Application) : ViewModel()
                     _waiting.value = false
               }
     }
+
+    fun loadDummies(){
+        viewModelScope.launch { repo.insertDummyValues() }
+    }
 }

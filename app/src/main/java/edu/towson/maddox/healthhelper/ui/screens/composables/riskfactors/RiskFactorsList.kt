@@ -14,7 +14,7 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 fun RiskFactorsList(vm : RiskFactorsListViewModel,
                     onClickFAB : () -> Unit)
 {
-    ItemList(vm = vm, onDelete = { vm.deleteUserItem(it) }, listType = ItemTypes.urf.toString()){
+    ItemList(vm = vm, onDelete = { vm.deleteUserItem(it) }, listType = ItemTypes.urf.toString(), itemTypes = ItemTypes.urf){
         FAB(onClick = onClickFAB)
     }
 }

@@ -14,14 +14,12 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 @ExperimentalCoroutinesApi
 @Composable
 fun VitalRow(vm : VitalSignListViewModel, item : uVitals){
-    Header(text = vm.getSubItem1(item.vital_id).type)
+
     Column(horizontalAlignment = Alignment.CenterHorizontally, modifier = Modifier.fillMaxWidth())
     {
+        Header(text = vm.getSubItem1(item.vital_id).type)
         Text(text = "Measurement: ${item.measurement} ${vm.getSubItem1(item.vital_id).unit}")
-    }
-    Column(horizontalAlignment = Alignment.CenterHorizontally, modifier = Modifier.fillMaxWidth())
-    {
-        Text(text = "Recording Method: ${vm.subItems2}")
+        Text(text = "Recording Method: ${vm.getSubItem2(item.rMethod_id)}")
         Text(text = "Recorded At: ${item.timestamp}")
     }
 }

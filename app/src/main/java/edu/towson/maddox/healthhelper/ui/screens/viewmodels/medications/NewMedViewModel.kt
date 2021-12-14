@@ -36,19 +36,28 @@ class NewMedViewModel(private val repo : HealthRepo) : NewItemViewModel<Medicati
 
     override fun addUserItem()
     {
-        if (numeric.value==0.0 || selectedIndex3.value == null ||selectedIndex4.value == null ||selectedIndex2.value == null ||selectedIndex1.value == null || getStartDate()=="")
+        if (numeric.value<=0.0)
         {
             toggleErrorPopupVisible()
             throw Exception("error")
         }
-        else
+        else if (selectedIndex1.value==1 || selectedIndex2.value==1 || selectedIndex3.value==1 || selectedIndex4.value==1 || getStartDate()=="2010-1-1" || getEndDate()=="2011-1-1")
         {
-            val item = uMedications(user_id = repo.returnUserId(), medication_id = getSubItem1().medication_id, frequency_id = getSubItem2().frequency_id, method_id = getSubItem3().method_id, unit_id = getSubItem4().unit_id,getStartDate(),getEndDate(), reason = super.textEntry.value, dosage = super.numeric.value)
-            repo.addUserMeds(item)
-            viewModelScope.launch {
-                repo.insertUserMeds(item)
-                repo.setUserMeds()
-            }
+            toggleNoChangePopupVisible()
+            throw Exception("error")
+        }
+        else{
+            proceedToAddUserItem()
+        }
+    }
+
+    override fun proceedToAddUserItem()
+    {
+        val item = uMedications(user_id = repo.returnUserId(), medication_id = getSubItem1().medication_id, frequency_id = getSubItem2().frequency_id, method_id = getSubItem3().method_id, unit_id = getSubItem4().unit_id,getStartDate(),getEndDate(), reason = super.textEntry.value, dosage = super.numeric.value)
+        repo.addUserMeds(item)
+        viewModelScope.launch {
+            repo.insertUserMeds(item)
+            repo.setUserMeds()
         }
     }
 }

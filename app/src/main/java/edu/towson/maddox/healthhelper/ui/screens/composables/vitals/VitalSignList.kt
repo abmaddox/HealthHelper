@@ -14,7 +14,7 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 fun VitalSignList(vm : VitalSignListViewModel,
                   onClickFAB : () -> Unit)
 {
-    ItemList(vm = vm, onDelete = { vm.deleteUserItem(it) }, listType = ItemTypes.uv.toString()){
+    ItemList(listType = ItemTypes.uv.toString(), vm = vm, onDelete = { vm.deleteUserItem(it) }, fab = {
         FAB(onClick = onClickFAB)
-    }
+    }, itemTypes = ItemTypes.uv)
 }

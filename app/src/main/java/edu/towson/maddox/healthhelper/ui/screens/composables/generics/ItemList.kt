@@ -13,6 +13,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import edu.towson.maddox.healthhelper.ui.components.Header
+import edu.towson.maddox.healthhelper.ui.components.ItemTypes
 import edu.towson.maddox.healthhelper.ui.screens.viewmodels.generics.IItemListViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 
@@ -20,10 +21,11 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 @ExperimentalCoroutinesApi
 @Composable
 fun <A,B,C,D,E>ItemList(
-    listType : String,
+    listType: String,
     vm: IItemListViewModel<A, B, C, D, E>,
+    itemTypes: ItemTypes,
     onDelete: (Int) -> Unit,
-    fab: @Composable () -> Unit = {}
+    fab: @Composable () -> Unit = {},
 ){
     Scaffold(
         floatingActionButton = fab,
@@ -50,7 +52,8 @@ fun <A,B,C,D,E>ItemList(
                             idx = idx,
                             vm = vm,
                             onDelete = { i -> onDelete(i) },
-                            item = item
+                            item = item,
+                            itemTypes = itemTypes
                         )
                     }
                 }

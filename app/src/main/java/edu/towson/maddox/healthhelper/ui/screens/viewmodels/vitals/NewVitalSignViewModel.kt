@@ -32,24 +32,36 @@ class NewVitalSignViewModel(private val repo : HealthRepo) : NewItemViewModel<Vi
     }
 
     override fun addUserItem() {
-        if (numeric.value==0.0 || selectedIndex2.value == null ||selectedIndex1.value == null)
+        if (numeric.value<=0.0)
         {
             toggleErrorPopupVisible()
             throw Exception("error")
         }
+        else if (selectedIndex2.value == 1 || selectedIndex1.value == 1)
+        {
+            toggleNoChangePopupVisible()
+            throw Exception("error")
+        }
         else
         {
-            val item = uVitals(
-                user_id = repo.returnUserId(),
-                vital_id = getSubItem1().vital_id,
-                rMethod_id = getSubItem2().rMethod_id,
-                measurement = numeric.value
-            )
-            repo.addUserVitals(item)
-            viewModelScope.launch {
-                repo.insertUserVital(item)
-                repo.setUserVitals()
-            }
+            proceedToAddUserItem()
         }
     }
+
+    override fun proceedToAddUserItem()
+    {
+        val item = uVitals(
+            user_id = repo.returnUserId(),
+            vital_id = getSubItem1().vital_id,
+            rMethod_id = getSubItem2().rMethod_id,
+            measurement = numeric.value
+        )
+        repo.addUserVitals(item)
+        viewModelScope.launch {
+            repo.insertUserVital(item)
+            repo.setUserVitals()
+        }
+    }
+
+
 }

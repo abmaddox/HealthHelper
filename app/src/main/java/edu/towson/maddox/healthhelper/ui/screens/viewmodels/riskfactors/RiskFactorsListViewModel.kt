@@ -18,12 +18,12 @@ class RiskFactorsListViewModel(private val repo : HealthRepo) : ItemListViewMode
 
     override fun setUserItems(): List<uRiskFactors>
     {
-        return repo.getUserRiskFactors() ?: listOf()
+        return repo.getUserRiskFactors()
     }
 
     override fun setSubItems1(): List<RiskFactor>
     {
-        return repo.getRiskFactors() ?: listOf()
+        return repo.getRiskFactors()
     }
 
     override fun setSubItems2(): List<Int>

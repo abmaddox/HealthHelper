@@ -14,7 +14,13 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 fun MedicationList(vm : MedListViewModel,
                    onClickFAB : () -> Unit)
 {
-    ItemList(vm = vm, onDelete = { vm.deleteUserItem(it) }, listType = ItemTypes.umed.toString()){
-        FAB(onClick = onClickFAB)
-    }
+    ItemList(
+        listType = ItemTypes.umed.toString(),
+        vm = vm,
+        onDelete = { vm.deleteUserItem(it) },
+        fab = {
+            FAB(onClick = onClickFAB)
+        },
+        itemTypes = ItemTypes.umed
+    )
 }

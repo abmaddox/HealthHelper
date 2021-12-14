@@ -32,26 +32,31 @@ class NewConditionViewModel(private val repo : HealthRepo) : NewItemViewModel<Co
     }
 
     override fun addUserItem() {
-        if (selectedIndex1.value == null || getStartDate()=="")
+        if (selectedIndex1.value==1 || getStartDate()=="2010-1-1" ||getEndDate()=="2011-1-1")
         {
-            toggleErrorPopupVisible()
+            toggleNoChangePopupVisible()
             throw Exception("error")
         }
         else
         {
-            val item = uConditions(
-                user_id = repo.returnUserId(),
-                subItems1.value[selectedIndex1.value!!].condition_id,
-                getStartDate(),
-                getEndDate()
-            )
-            repo.addUserConditions(item)
-
-            viewModelScope.launch {
-                repo.insertUserConditions(item)
-                repo.setUserConditions()
-            }
+            proceedToAddUserItem()
         }
 
+    }
+
+    override fun proceedToAddUserItem()
+    {
+        val item = uConditions(
+            user_id = repo.returnUserId(),
+            subItems1.value[selectedIndex1.value].condition_id,
+            getStartDate(),
+            getEndDate()
+        )
+        repo.addUserConditions(item)
+
+        viewModelScope.launch {
+            repo.insertUserConditions(item)
+            repo.setUserConditions()
+        }
     }
 }

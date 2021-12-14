@@ -15,7 +15,7 @@ import androidx.compose.ui.unit.dp
 
 @Composable
 fun ComposeMenu(
-    selectedIndex : Int?,
+    selectedIndex : Int,
     menuItems: List<String>,
     menuExpandedState: Boolean = false,
     itemTypes : String,
@@ -35,7 +35,7 @@ fun ComposeMenu(
                 .fillMaxWidth())
         {
             Column(horizontalAlignment = Alignment.Start) {
-                TextField(value = if (selectedIndex == null) "" else menuItems[selectedIndex],
+                TextField(value = menuItems[selectedIndex+1],
                     onValueChange = {},
                     readOnly = true,
                     modifier = Modifier.clickable { toggleMenuExpandStatus() })
@@ -55,7 +55,8 @@ fun ComposeMenu(
             onDismissRequest = { onDismissMenuView() }
         ) {
             menuItems.mapIndexed { idx, s ->
-                DropdownMenuItem(onClick = { onMenuItemClick(idx) }, enabled = idx!=0) {
+                DropdownMenuItem(onClick = { onMenuItemClick(idx-1)
+                    toggleMenuExpandStatus()}, enabled = idx!=0) {
                     Text(text = s)
                 }
             }

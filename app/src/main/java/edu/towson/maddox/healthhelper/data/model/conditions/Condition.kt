@@ -9,3 +9,9 @@ data class Condition (
     val condition_id : Int = 0,
     val conditionName : String
         )
+{
+    override fun toString(): String
+    {
+        return conditionName
+    }
+}
