@@ -32,7 +32,7 @@ import edu.towson.maddox.healthhelper.data.model.vitals.uVitals
     uMedications::class,
     Condition::class,
     uConditions::class
-], version=7)
+], version=8)
 abstract class DB : RoomDatabase() {
     abstract fun healthDAO() : HealthDAO
     companion object {
